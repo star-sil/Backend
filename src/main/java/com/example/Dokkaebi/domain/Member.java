@@ -1,13 +1,22 @@
 package com.example.Dokkaebi.domain;
 
 public class Member {
-    private String memberName;
+    private String id;
+    private String password;
 
-    public String getMemberName() {
-        return memberName;
+    public String getId() {
+        return id;
     }
 
-    public void setMemberName(String memberName) {
-        this.memberName = memberName;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
