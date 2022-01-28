@@ -18,8 +18,9 @@ public class MainController {
 //        else
 //            return "fail";
 //    }
+
     @ResponseBody
-    @RequestMapping(value = "/start", method = RequestMethod.POST)
+    @PostMapping(value = "/start")
     public String test(@RequestBody Member member) {
         log.info(member.getId());
         if(member.getId().equals("cilab"))
