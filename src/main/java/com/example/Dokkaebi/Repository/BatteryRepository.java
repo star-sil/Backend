@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface BatteryRepository extends JpaRepository<Battery,Integer>{
+public interface BatteryRepository extends JpaRepository<Battery,Long>{
 
 }

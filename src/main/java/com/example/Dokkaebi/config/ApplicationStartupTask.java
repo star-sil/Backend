@@ -7,9 +7,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @RequiredArgsConstructor
-//@AllArgsConstructor
 public class ApplicationStartupTask implements ApplicationListener<ApplicationReadyEvent> {
 
     private final NettyServerSocket nettyServerSocket;
