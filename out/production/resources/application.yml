@@ -12,12 +12,8 @@ spring:
 #    password: cilab!23
 #    driver-class-name: com.mysql.cj.jdbc.Driver
 #  jpa:
-#  hibernate:
-#    dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-#    ddl-auto: none
-#  properties:
-#    hibernate:
-#      format_sql: true
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 server:
   host: localhost

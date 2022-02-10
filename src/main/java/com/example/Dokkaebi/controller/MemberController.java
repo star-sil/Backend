@@ -16,13 +16,14 @@ public class MemberController {
     private final MemberService memberservice;
 
     @PostMapping("/member/new")
-    public ResponseEntity createMember(@RequestBody MemberRequestDto memberrequestdto) {
+    public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberrequestdto) {
         Member member = memberrequestdto.toEntity();
         Long memberId = memberservice.join(member);
         if(memberId == -1L) {
             return new ResponseEntity("duplicate identity", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(memberId.toString(),HttpStatus.OK);
+        //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
+        return new ResponseEntity(memberId,HttpStatus.OK);
     }
 
 }
