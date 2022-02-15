@@ -13,8 +13,7 @@ import java.net.InetSocketAddress;
 
 @Slf4j
 @RequiredArgsConstructor
-//@AllArgsConstructor
-@Component
+//@Component
 public class NettyServerSocket {
     private final ServerBootstrap serverBootstrap;
     private final InetSocketAddress tcpPort;

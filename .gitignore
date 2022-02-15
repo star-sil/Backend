@@ -35,6 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
-
-.DS_Store
-/src/resources/application-dev.yml
+/src/main/resources/application-dev.yml
+application-dev.yml
+/Jenkinsfile

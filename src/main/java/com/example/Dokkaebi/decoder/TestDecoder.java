@@ -1,7 +1,6 @@
 package com.example.Dokkaebi.decoder;
 
 import com.example.Dokkaebi.Repository.BatteryRepository;
-import com.example.Dokkaebi.Repository.LocalRepository;
 import com.example.Dokkaebi.domain.Battery;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-@Component
+//@Component
 @RequiredArgsConstructor
 public class TestDecoder extends ByteToMessageDecoder {
     private int DATA_LENGTH = 36;

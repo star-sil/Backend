@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test #메모리모드로 동작
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create #어플리케이션 실행시 테이블 다 지우고 다시 시작
+    properties:
+      hibernate:
+        #show_sql: true #logging과 차이점은 얘는 print로 찍고 logging은 로그로 찍는다.
+        format_sql: true
+
+server:
+  host: localhost
+  tcp: 5001
+  netty:
+    boss-count: 10
+    worker-count: 11
+    keep-alive: FALSE
+    backlog: 100
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: trace #쿼리 파라미터 남기기

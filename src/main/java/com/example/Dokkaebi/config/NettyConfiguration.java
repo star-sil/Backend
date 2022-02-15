@@ -1,7 +1,6 @@
 package com.example.Dokkaebi.config;
 
 import com.example.Dokkaebi.Repository.BatteryRepository;
-import com.example.Dokkaebi.Repository.LocalRepository;
 import com.example.Dokkaebi.socket.NettyChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -19,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 import java.net.InetSocketAddress;
 
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class NettyConfiguration {
 

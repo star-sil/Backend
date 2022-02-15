@@ -1,7 +1,6 @@
 package com.example.Dokkaebi.socket;
 
 import com.example.Dokkaebi.Repository.BatteryRepository;
-import com.example.Dokkaebi.Repository.LocalRepository;
 import com.example.Dokkaebi.decoder.TestDecoder;
 import com.example.Dokkaebi.handler.TestHandler;
 import io.netty.channel.ChannelInitializer;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
     private final TestHandler testHandler;
