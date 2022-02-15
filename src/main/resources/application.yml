@@ -1,7 +1,7 @@
 server:
   port: 8081
   host: localhost
-  tcp: 5001
+  tcp: 5000
   netty:
     boss-count: 10
     worker-count: 11
