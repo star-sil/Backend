@@ -9,7 +9,7 @@ import java.util.Date;
 public class HelloController {
     @GetMapping("/hello")
     public String hello(){
-        return "Dokkaebi project\n" + new Date() ;
+        return "Dokkaebi project + CI/CD test success!!\n" + new Date() ;
     }
 
 }
