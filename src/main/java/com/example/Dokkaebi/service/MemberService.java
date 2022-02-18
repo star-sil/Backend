@@ -1,7 +1,9 @@
 package com.example.Dokkaebi.service;
 
 import com.example.Dokkaebi.Repository.MemberRepository;
+import com.example.Dokkaebi.Repository.TokenRepository;
 import com.example.Dokkaebi.domain.Member;
+import com.example.Dokkaebi.domain.Token;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,12 @@ public class MemberService {
         return member.getId();
     }
 
+    @Transactional
+    public List<Member> findMember(String identity) {
+        return MemberRepo.findByIdentity(identity);
+    }
+
+
     private boolean validateDuplicateMember(Member member) {
         List<Member> findMember = MemberRepo.findByIdentity(member.getIdentity());
         if (findMember.isEmpty()) {
@@ -33,4 +41,5 @@ public class MemberService {
             return false;
         }
     }
+
 }
