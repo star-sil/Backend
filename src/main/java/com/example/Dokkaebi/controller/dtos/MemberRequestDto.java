@@ -1,4 +1,4 @@
-package com.example.Dokkaebi.controller;
+package com.example.Dokkaebi.controller.dtos;
 
 import com.example.Dokkaebi.domain.Auth;
 import com.example.Dokkaebi.domain.Member;

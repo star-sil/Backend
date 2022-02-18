@@ -26,3 +26,6 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: trace #쿼리 파라미터 남기기
+
+key:
+  token: cilab
