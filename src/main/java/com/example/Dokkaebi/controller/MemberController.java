@@ -72,6 +72,7 @@ public class MemberController {
     @ResponseBody
     public String CheckToken(@RequestHeader(value = "access_token") String accessToken) {
         return "asdf";
+
     }
 
 
