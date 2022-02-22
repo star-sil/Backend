@@ -1,43 +1,44 @@
 package com.example.Dokkaebi.decoder;
 
 import com.example.Dokkaebi.Repository.BatteryRepository;
+import com.example.Dokkaebi.Repository.ClientDataRepository;
 import com.example.Dokkaebi.domain.Battery;
+import com.example.Dokkaebi.domain.Client;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.MemberRemoval;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-//@Component
+@Component
 @RequiredArgsConstructor
 public class TestDecoder extends ByteToMessageDecoder {
     private int DATA_LENGTH = 36;
 
-    private final BatteryRepository Repo;
 
-
-
-
+    private final BatteryRepository batteryRepo;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
         //읽을 수 있는 바이트가 있는지
         //capacity는 총 바이트 배열이다.
         if (in.readableBytes() < DATA_LENGTH) {
+            String data = in.toString(Charset.defaultCharset());
             log.info(in.toString(Charset.defaultCharset()));
+            String bike = data.substring(2,6);
+            in.clear();
+            String sendMessage = "BB" + bike + "OKCCFF";
+            log.info(sendMessage);
+            ctx.writeAndFlush(in.writeBytes(sendMessage.getBytes()).readBytes(12));
+            ctx.close();
             return;
         }
         String data = in.toString(Charset.defaultCharset());
@@ -65,11 +66,17 @@ public class TestDecoder extends ByteToMessageDecoder {
         Boolean npow = Boolean.valueOf(pow);
         Boolean nshoc = Boolean.valueOf(shoc);
         Battery battery = new Battery(nbike, nstat, nsoc,nnvolt, ntemp, nnlat, nnlon, npow, nshoc);
+        Client client = new Client(ctx.channel().remoteAddress().toString(),bike);
         if(battery != null)
         {
-            Repo.save(battery);
+            batteryRepo.save(battery);
         }
+        String approveMessage = "BB" + bike + "PPFF";
         log.info(in.toString(Charset.defaultCharset()));
-        out.add(in.readBytes(DATA_LENGTH));
+        in.clear();
+        String sendMessage = "BB" + bike + "OKAAFF";
+        //out.add(in.writeBytes(sendMessage.getBytes()).readBytes(12));
+        ctx.writeAndFlush(in.writeBytes(sendMessage.getBytes()).readBytes(12));
+        ctx.close();
     }
 }
