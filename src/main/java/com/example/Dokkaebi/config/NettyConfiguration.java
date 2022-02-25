@@ -1,6 +1,5 @@
 package com.example.Dokkaebi.config;
 
-import com.example.Dokkaebi.Repository.BatteryRepository;
 import com.example.Dokkaebi.socket.NettyChannelInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
