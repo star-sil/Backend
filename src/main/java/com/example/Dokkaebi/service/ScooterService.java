@@ -1,6 +1,5 @@
 package com.example.Dokkaebi.service;
 
-import com.example.Dokkaebi.Repository.BatteryRepository;
 import com.example.Dokkaebi.Repository.ScooterRepository;
 import com.example.Dokkaebi.domain.Scooter;
 import lombok.RequiredArgsConstructor;
