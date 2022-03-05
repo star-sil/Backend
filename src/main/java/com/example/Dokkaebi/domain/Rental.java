@@ -17,13 +17,15 @@ public class Rental {
     @Id @GeneratedValue
     private Long id;
     private String identity;
+    private String bikeNum;
     private LocalDate startDate;
     private LocalDate endDate;
     private Long price;
 
     @Builder
-    public Rental(String identity, LocalDate startDate, LocalDate endDate, Long price) {
+    public Rental(String identity, String bikeNum,LocalDate startDate, LocalDate endDate, Long price) {
         this.identity = identity;
+        this.bikeNum = bikeNum;
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;

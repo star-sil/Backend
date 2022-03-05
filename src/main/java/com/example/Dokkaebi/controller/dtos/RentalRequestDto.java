@@ -15,16 +15,18 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 public class RentalRequestDto {
     private String identity;
+    private String bikeNum;
     private LocalDate startDate;
     private LocalDate endDate;
     private Long price;
 
     @Builder
-    public RentalRequestDto(String identity, LocalDate startDate, LocalDate endDate) {
+    public RentalRequestDto(String identity, String bikeNum, LocalDate startDate, LocalDate endDate, Long price) {
         this.identity = identity;
+        this.bikeNum = bikeNum;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.price = calculatePrice();
+        this.price = price;
     }
 
     public long calculatePrice(){
@@ -35,6 +37,7 @@ public class RentalRequestDto {
     public Rental toEntity(){
         return Rental.builder()
                 .identity(this.identity)
+                .bikeNum(this.bikeNum)
                 .startDate(this.startDate)
                 .endDate(this.endDate)
                 .price(this.price)
