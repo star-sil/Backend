@@ -1,6 +1,7 @@
 package com.example.Dokkaebi.Repository;
 
 import com.example.Dokkaebi.domain.Scooter;
+import com.example.Dokkaebi.domain.Status;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ public class ScooterRepositoryTest {
     public void 스쿠터번호로_찾기() throws Exception{
         //given
         LocalDateTime date = LocalDateTime.now().MIN;
-        Scooter scooter = new Scooter("bike","","","","","","","","",date);
+        Scooter scooter = new Scooter("bike","AA",90,12.8,29,36.12345,123.12345,"01", Status.POSSIBLE,1,date);
 
         //when
         scooterRepository.save(scooter);
@@ -39,9 +40,9 @@ public class ScooterRepositoryTest {
         //given
         LocalDateTime date = LocalDateTime.now();
         LocalDateTime lateDate = LocalDateTime.now().plusDays(1);
-        Scooter scooter1 = new Scooter("0001","","","","","","","","",date);
-        Scooter scooter2 = new Scooter("0001","","","","","","","","", lateDate);
-        Scooter scooter3 = new Scooter("0002","","","","","","","","",date);
+        Scooter scooter1 = new Scooter("0001","AA",90,12.8,29,36.12345,123.12345,"01",Status.POSSIBLE,1,date);
+        Scooter scooter2 = new Scooter("0001","AA",90,12.8,29,36.12345,123.12345,"01",Status.POSSIBLE,1,date);
+        Scooter scooter3 = new Scooter("0002","AA",90,12.8,29,36.12345,123.12345,"01",Status.POSSIBLE,1,date);
         List<Scooter> scooters = new ArrayList<>();
         List<String> bikes = new ArrayList<>();
         scooters.add(scooter1); scooters.add(scooter2); scooters.add(scooter3);
