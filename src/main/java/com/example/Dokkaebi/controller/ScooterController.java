@@ -27,6 +27,8 @@ public class ScooterController {
                             .bike(scooter.getBike())
                             .lat(scooter.getLat())
                             .lon(scooter.getLon())
+                            .soc(scooter.getSoc())
+                            .status(scooter.getStatus())
                             .build());
         }
         return new ResponseEntity(responseDtos, HttpStatus.OK);

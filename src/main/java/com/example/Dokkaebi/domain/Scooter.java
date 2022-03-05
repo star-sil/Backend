@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -18,16 +19,19 @@ public class Scooter {
 
     private String bike;
     private String stat;
-    private String soc;
-    private String volt;
-    private String temp;
-    private String lat;
-    private String lon;
+    private int soc;
+    private double volt;
+    private int temp;
+    private double lat;
+    private double lon;
     private String pow;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    private int shock;
     private LocalDateTime time;
 
     @Builder
-    public Scooter(String bike, String stat, String soc, String volt, String temp, String lat, String lon, String pow, String shoc, LocalDateTime time) {
+    public Scooter(String bike, String stat, int soc, double volt, int temp, double lat, double lon, String pow, Status status, int shock, LocalDateTime time) {
         this.bike = bike;
         this.stat = stat;
         this.soc = soc;
@@ -36,7 +40,8 @@ public class Scooter {
         this.lat = lat;
         this.lon = lon;
         this.pow = pow;
+        this.status = status;
+        this.shock = shock;
         this.time = time;
     }
-
 }
