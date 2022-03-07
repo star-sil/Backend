@@ -1,6 +1,7 @@
 package com.example.Dokkaebi.controller.dtos;
 
 import com.example.Dokkaebi.domain.Scooter;
+import com.example.Dokkaebi.domain.Status;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,20 +10,18 @@ import java.time.LocalDateTime;
 @Getter
 public class ScooterResponseDto {
     private String bike;
-    private String lat;
-    private String lon;
+    private int soc;
+    private double lat;
+    private double lon;
+    private Status status;
 
     @Builder
-    public ScooterResponseDto(String bike, String lat, String lon) {
+    public ScooterResponseDto(String bike, int soc, double lat, double lon, Status status) {
         this.bike = bike;
+        this.soc = soc;
         this.lat = lat;
         this.lon = lon;
-        changeLocationFormat();
-    }
-
-    private void changeLocationFormat() {
-        this.lat = this.lat.substring(0,3) + "." + this.lat.substring(3,8);
-        this.lon = this.lon.substring(0,3) + "." + this.lon.substring(3,8);
+        this.status = status;
     }
 
 
