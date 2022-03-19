@@ -32,8 +32,8 @@ public class MemberController {
     private final TokenService tokenService;
 
     @PostMapping("/member/new")
-    public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberrequestdto) {
-        Member member = memberrequestdto.toEntity();
+    public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberRequestDto) {
+        Member member = memberRequestDto.toEntity();
         Long memberId = memberservice.join(member);
         if (memberId == -1L) {
             return new ResponseEntity("duplicate identity", HttpStatus.BAD_REQUEST);
