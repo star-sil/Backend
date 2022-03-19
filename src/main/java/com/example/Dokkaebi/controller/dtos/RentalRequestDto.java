@@ -1,13 +1,10 @@
 package com.example.Dokkaebi.controller.dtos;
 
 import com.example.Dokkaebi.domain.Rental;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 
 @Slf4j
@@ -19,15 +16,6 @@ public class RentalRequestDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private Long price;
-
-    @Builder
-    public RentalRequestDto(String identity, String bikeNum, LocalDate startDate, LocalDate endDate, Long price) {
-        this.identity = identity;
-        this.bikeNum = bikeNum;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.price = price;
-    }
 
     public long calculatePrice(){
         this.price = ChronoUnit.DAYS.between(this.startDate,this.endDate) * 5000L;
