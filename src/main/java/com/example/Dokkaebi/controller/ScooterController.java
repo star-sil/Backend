@@ -24,13 +24,7 @@ public class ScooterController {
         List<Scooter> Scooters = scooterService.findAllScooter();
         List<ScooterResponseDto> responseDtos = new ArrayList<>();
         for(Scooter scooter : Scooters){
-            responseDtos.add(ScooterResponseDto.builder()
-                            .bike(scooter.getBike())
-                            .lat(scooter.getLat())
-                            .lon(scooter.getLon())
-                            .soc(scooter.getSoc())
-                            .status(scooter.getStatus())
-                            .build());
+            responseDtos.add(new ScooterResponseDto(scooter));
         }
         return new ResponseEntity(new Result(responseDtos), HttpStatus.OK);
     }

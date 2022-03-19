@@ -16,12 +16,12 @@ public class ScooterResponseDto {
     private Status status;
 
     @Builder
-    public ScooterResponseDto(String bike, int soc, double lat, double lon, Status status) {
-        this.bike = bike;
-        this.soc = soc;
-        this.lat = lat;
-        this.lon = lon;
-        this.status = status;
+    public ScooterResponseDto(Scooter scooter) {
+        this.bike = scooter.getBike();
+        this.soc = scooter.getSoc();
+        this.lat = scooter.getLat();
+        this.lon = scooter.getLon();
+        this.status = scooter.getStatus();
     }
 
 
