@@ -8,6 +8,8 @@ import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import com.example.Dokkaebi.service.MemberService;
 import com.example.Dokkaebi.service.TokenService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +49,7 @@ public class MemberController {
         else{
             TokenResponseDto tokenResponseDto = new TokenResponseDto(members.get(0).getIdentity(),key);
             tokenService.Join(tokenResponseDto.toEntity());
-            return new ResponseEntity(tokenResponseDto,HttpStatus.OK);
+            return new ResponseEntity(new Result(tokenResponseDto),HttpStatus.OK);
         }
     }
 
@@ -61,7 +63,7 @@ public class MemberController {
             else{
                 String identityOfToken = tokenService.encodeToken(accessToken);
                 TokenResponseDto tokenResponseDto = new TokenResponseDto(identityOfToken,key);
-                return new ResponseEntity(tokenResponseDto, HttpStatus.OK);
+                return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
 
             }
         } else return new ResponseEntity("invalid Token", HttpStatus.BAD_REQUEST);
@@ -75,5 +77,10 @@ public class MemberController {
 
     }
 
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
+    }
 
 }
