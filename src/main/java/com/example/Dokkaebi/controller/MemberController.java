@@ -44,10 +44,10 @@ public class MemberController {
 
     @PostMapping("/member/login")
     public ResponseEntity<Object> loginMember(@RequestBody LoginRequestDto loginRequestDto) {
-        List<Member> members = memberservice.findMember(loginRequestDto.getIdentity());
-        if(members.isEmpty()) return new ResponseEntity("not exist identity", HttpStatus.BAD_REQUEST);
+        Member member = memberservice.findMember(loginRequestDto.getIdentity());
+        if(member.getIdentity() == null) return new ResponseEntity("not exist identity", HttpStatus.BAD_REQUEST);
         else{
-            TokenResponseDto tokenResponseDto = new TokenResponseDto(members.get(0).getIdentity(),key);
+            TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
             tokenService.Join(tokenResponseDto.toEntity());
             return new ResponseEntity(new Result(tokenResponseDto),HttpStatus.OK);
         }
@@ -62,9 +62,9 @@ public class MemberController {
             if(tokens.isEmpty()) return new ResponseEntity("invalid refreshToken", HttpStatus.BAD_REQUEST);
             else{
                 String identityOfToken = tokenService.encodeToken(accessToken);
-                TokenResponseDto tokenResponseDto = new TokenResponseDto(identityOfToken,key);
+                Member member = memberservice.findMember(identityOfToken);
+                TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
                 return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
-
             }
         } else return new ResponseEntity("invalid Token", HttpStatus.BAD_REQUEST);
     }
