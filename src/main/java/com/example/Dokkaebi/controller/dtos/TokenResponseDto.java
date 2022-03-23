@@ -41,7 +41,6 @@ public class TokenResponseDto {
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(Integer.valueOf(30)).toMillis()))
                 .claim("userIdentity",member.getIdentity())
-                .claim("userAuth",member.getAuth())
                 .signWith(SignatureAlgorithm.HS256,encodedString)
                 .compact();
     }
