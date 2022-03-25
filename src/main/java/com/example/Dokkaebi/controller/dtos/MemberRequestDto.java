@@ -24,17 +24,17 @@ public class MemberRequestDto {
     private Auth auth;
 
     @Builder
-    public MemberRequestDto(String name, String identity, String password, String city, String street, String phone, String email, String birth, Sex sex, Auth auth) {
-        this.name = name;
-        this.identity = identity;
-        this.password = password;
-        this.city = city;
-        this.street = street;
-        this.phone = phone;
-        this.email = email;
-        this.birth = birth;
-        this.sex = sex;
-        this.auth = auth;
+    public MemberRequestDto(Member member) {
+        this.name = member.getName();
+        this.identity = member.getIdentity();
+        this.password = member.getPassword();
+        this.city = member.getCity();
+        this.street = member.getStreet();
+        this.phone = member.getPhone();
+        this.email = member.getEmail();
+        this.birth = member.getBirth();
+        this.sex = member.getSex();
+        this.auth = member.getAuth();
     }
 
     public Member toEntity() {

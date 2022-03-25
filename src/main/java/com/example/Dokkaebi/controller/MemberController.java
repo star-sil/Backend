@@ -8,6 +8,8 @@ import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import com.example.Dokkaebi.service.MemberService;
 import com.example.Dokkaebi.service.TokenService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,8 +32,8 @@ public class MemberController {
     private final TokenService tokenService;
 
     @PostMapping("/member/new")
-    public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberrequestdto) {
-        Member member = memberrequestdto.toEntity();
+    public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberRequestDto) {
+        Member member = memberRequestDto.toEntity();
         Long memberId = memberservice.join(member);
         if (memberId == -1L) {
             return new ResponseEntity("duplicate identity", HttpStatus.BAD_REQUEST);
@@ -42,12 +44,12 @@ public class MemberController {
 
     @PostMapping("/member/login")
     public ResponseEntity<Object> loginMember(@RequestBody LoginRequestDto loginRequestDto) {
-        List<Member> members = memberservice.findMember(loginRequestDto.getIdentity());
-        if(members.isEmpty()) return new ResponseEntity("not exist identity", HttpStatus.BAD_REQUEST);
+        Member member = memberservice.findMember(loginRequestDto.getIdentity());
+        if(member.getIdentity() == null) return new ResponseEntity("not exist identity", HttpStatus.BAD_REQUEST);
         else{
-            TokenResponseDto tokenResponseDto = new TokenResponseDto(members.get(0).getIdentity(),key);
+            TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
             tokenService.Join(tokenResponseDto.toEntity());
-            return new ResponseEntity(tokenResponseDto,HttpStatus.OK);
+            return new ResponseEntity(new Result(tokenResponseDto),HttpStatus.OK);
         }
     }
 
@@ -60,9 +62,9 @@ public class MemberController {
             if(tokens.isEmpty()) return new ResponseEntity("invalid refreshToken", HttpStatus.BAD_REQUEST);
             else{
                 String identityOfToken = tokenService.encodeToken(accessToken);
-                TokenResponseDto tokenResponseDto = new TokenResponseDto(identityOfToken,key);
-                return new ResponseEntity(tokenResponseDto, HttpStatus.OK);
-
+                Member member = memberservice.findMember(identityOfToken);
+                TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
+                return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
             }
         } else return new ResponseEntity("invalid Token", HttpStatus.BAD_REQUEST);
     }
@@ -75,5 +77,10 @@ public class MemberController {
 
     }
 
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
+    }
 
 }

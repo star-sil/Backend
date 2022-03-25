@@ -1,5 +1,7 @@
 package com.example.Dokkaebi.controller.dtos;
 
+import com.example.Dokkaebi.domain.Auth;
+import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -16,12 +18,14 @@ import java.util.Date;
 public class TokenResponseDto {
     private String accessToken;
     private String refreshToken;
+    private Auth auth;
 
 
 
-    public TokenResponseDto(String identity, String key) {
-        this.accessToken = makeAccessJws(identity,key);
-        this.refreshToken = makeAccessJws("", key);
+    public TokenResponseDto(Member member, String key) {
+        this.accessToken = makeAccessJws(member,key);
+        this.refreshToken = makeRefreshJws(key);
+        this.auth = member.getAuth();
 
     }
 
@@ -31,29 +35,29 @@ public class TokenResponseDto {
                 .build();
     }
 
-    private String makeAccessJws(String identity, String key) {
+    private String makeAccessJws(Member member, String key) {
         Date now = new Date();
         String encodedString = Base64.getEncoder().encodeToString(key.getBytes());
 
-        if(identity.isEmpty()){
-            return Jwts.builder()
-                    .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                    .setIssuedAt(now)
-                    .setExpiration(new Date(now.getTime() + Duration.ofMinutes(Integer.valueOf(30)).toMillis()))
-                    .claim("userIdentity",identity)
-                    .signWith(SignatureAlgorithm.HS256,encodedString)
-                    .compact();
-        }
-        else {
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + Duration.ofMinutes(Integer.valueOf(30)).toMillis()))
+                .claim("userIdentity",member.getIdentity())
+                .signWith(SignatureAlgorithm.HS256,encodedString)
+                .compact();
+    }
+
+    private String makeRefreshJws(String key) {
+        Date now = new Date();
+        String encodedString = Base64.getEncoder().encodeToString(key.getBytes());
+
             return Jwts.builder()
                     .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                     .setIssuedAt(now)
                     .setExpiration(new Date(now.getTime() + Duration.ofMinutes(Integer.valueOf(5)).toMillis()))
-                    .claim("userIdentity",identity)
                     .signWith(SignatureAlgorithm.HS256,encodedString)
                     .compact();
         }
-
-    }
-
 }
+

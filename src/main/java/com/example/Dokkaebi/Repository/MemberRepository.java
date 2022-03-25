@@ -23,9 +23,15 @@ public class MemberRepository {
     }
 
     //getSingleList()는 정확히 값이 하나가 아니면 오류로 된다.
-    public List<Member> findByIdentity(String identity) {
-        return em.createQuery("select m from Member m where m.identity = :identity", Member.class)
+    public Member findByIdentity(String identity) {
+        List<Member> members = em.createQuery("select m from Member m where m.identity = :identity", Member.class)
                 .setParameter("identity", identity)
                 .getResultList();
+        if(members.isEmpty()){
+            return new Member();
+        }
+        else{
+            return members.get(0);
+        }
     }
 }

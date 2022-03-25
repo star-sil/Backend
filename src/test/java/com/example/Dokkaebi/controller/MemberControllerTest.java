@@ -40,12 +40,13 @@ public class MemberControllerTest {
     @Test
     public void 회원가입() throws Exception{
         //given
-        MemberRequestDto requestDto = MemberRequestDto.builder()
+        Member member = new Member().builder()
                 .identity("sadf")
                 .name("Asdf")
                 .auth(Auth.ADMIN)
                 .birth("asdf")
                 .build();
+        MemberRequestDto requestDto = new MemberRequestDto(member);
 
         String url = "http://localhost:" + port + "/member/new";
         //when

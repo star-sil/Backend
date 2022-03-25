@@ -28,14 +28,14 @@ public class MemberService {
     }
 
     @Transactional
-    public List<Member> findMember(String identity) {
+    public Member findMember(String identity) {
         return MemberRepo.findByIdentity(identity);
     }
 
 
     private boolean validateDuplicateMember(Member member) {
-        List<Member> findMember = MemberRepo.findByIdentity(member.getIdentity());
-        if (findMember.isEmpty()) {
+        Member findMember = MemberRepo.findByIdentity(member.getIdentity());
+        if (findMember.getIdentity() == null) {
             return true;
         } else {
             return false;
