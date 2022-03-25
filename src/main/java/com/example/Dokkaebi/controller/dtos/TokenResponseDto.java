@@ -1,5 +1,6 @@
 package com.example.Dokkaebi.controller.dtos;
 
+import com.example.Dokkaebi.domain.Auth;
 import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import io.jsonwebtoken.Header;
@@ -17,12 +18,14 @@ import java.util.Date;
 public class TokenResponseDto {
     private String accessToken;
     private String refreshToken;
+    private Auth auth;
 
 
 
     public TokenResponseDto(Member member, String key) {
         this.accessToken = makeAccessJws(member,key);
         this.refreshToken = makeRefreshJws(key);
+        this.auth = member.getAuth();
 
     }
 
