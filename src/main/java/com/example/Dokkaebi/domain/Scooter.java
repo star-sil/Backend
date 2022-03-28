@@ -17,6 +17,7 @@ public class Scooter {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String identity;
     private String bike;
     private String stat;
     private int soc;
@@ -29,9 +30,11 @@ public class Scooter {
     private Status status;
     private int shock;
     private LocalDateTime time;
+    private Long cycle;
 
     @Builder
-    public Scooter(String bike, String stat, int soc, double volt, int temp, double lat, double lon, String pow, Status status, int shock, LocalDateTime time) {
+    public Scooter(String identity,String bike, String stat, int soc, double volt, int temp, double lat, double lon, String pow, Status status, int shock, LocalDateTime time, Long cycle) {
+        this.identity = identity;
         this.bike = bike;
         this.stat = stat;
         this.soc = soc;
@@ -43,5 +46,6 @@ public class Scooter {
         this.status = status;
         this.shock = shock;
         this.time = time;
+        this.cycle = cycle;
     }
 }

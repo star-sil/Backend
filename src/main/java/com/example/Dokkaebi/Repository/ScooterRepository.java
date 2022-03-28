@@ -31,4 +31,10 @@ public class ScooterRepository {
     public void save(Scooter scooter) {
         em.persist(scooter);
     }
+
+    public List<Scooter> findBikeByIdentity(String identity) {
+        return em.createQuery("select s from Scooter s where s.identity = :identity", Scooter.class)
+                .setParameter("identity",identity)
+                .getResultList();
+    }
 }

@@ -26,4 +26,8 @@ public class ScooterService {
         return ScooterRepo.findAllByBike(bikes);
     }
 
+    public List<Scooter> findScooterByIdentity(String identity){
+        return ScooterRepo.findBikeByIdentity(identity);
+    }
+
 }
