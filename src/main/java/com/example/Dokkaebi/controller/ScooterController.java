@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,25 +37,29 @@ public class ScooterController {
     @ResponseBody
     public List<Record> checkRecord(@PathVariable String identity) {
         List<Scooter> scooters = scooterService.findScooterByIdentity(identity);
-        List<ScooterRecordResponseDto> recordDtos = new ArrayList<>();
+        List<ScooterRecordResponseDto> scooterDtos = new ArrayList<>();
         List<Record> records = new ArrayList<>();
-        long cycle = -1;
-        for (Scooter scooter : scooters) {
-            if(cycle == -1){
-                cycle = scooter.getCycle();
-                recordDtos.add(new ScooterRecordResponseDto(scooter));
+        String bike = new String(); LocalDateTime dateTime = LocalDateTime.now(); long cycle = 0;
+        for (int i = 0; i < scooters.size(); ++i) {
+            if(i == 0){
+                bike = scooters.get(i).getBike();
+                dateTime = scooters.get(i).getTime();
+                cycle = scooters.get(i).getCycle();
+                scooterDtos.add(new ScooterRecordResponseDto(scooters.get(i)));
+                scooterDtos.clear();
             }
-            else if (cycle != scooter.getCycle() && cycle != -1) {
-                records.add(new Record(cycle, recordDtos));
-                cycle = scooter.getCycle();
-                recordDtos.clear();
-                recordDtos.add(new ScooterRecordResponseDto(scooter));
+            else if(cycle != scooters.get(i).getCycle()){
+                records.add(new Record(bike,dateTime,scooterDtos));
+                scooterDtos.clear();
+                scooterDtos.add(new ScooterRecordResponseDto(scooters.get(i)));
+                bike = scooters.get(i).getBike(); dateTime = scooters.get(i).getTime();
+                cycle = scooters.get(i).getCycle();
             }
-            else {
-                recordDtos.add(new ScooterRecordResponseDto(scooter));
+            else{
+                scooterDtos.add(new ScooterRecordResponseDto((scooters.get(i))));
             }
         }
-        records.add(new Record(cycle, recordDtos));
+        records.add(new Record(bike,dateTime,scooterDtos));
         return records;
     }
 
@@ -67,7 +72,8 @@ public class ScooterController {
     @Data
     @AllArgsConstructor
     static class Record<T> {
-        private Long cycle;
+        private String bike;
+        private LocalDateTime startDate;
         private T data;
     }
 }
