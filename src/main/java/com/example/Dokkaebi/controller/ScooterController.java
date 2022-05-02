@@ -33,36 +33,6 @@ public class ScooterController {
         return new ResponseEntity(new Result(responseDtos), HttpStatus.OK);
     }
 
-    @GetMapping("/member/scooterRecord/{identity}")
-    @ResponseBody
-    public List<Record> checkRecord(@PathVariable String identity) {
-        List<Scooter> scooters = scooterService.findScooterByIdentity(identity);
-        List<ScooterRecordResponseDto> scooterDtos = new ArrayList<>();
-        List<Record> records = new ArrayList<>();
-        String bike = new String(); LocalDateTime dateTime = LocalDateTime.now(); long cycle = 0;
-        for (int i = 0; i < scooters.size(); ++i) {
-            if(i == 0){
-                bike = scooters.get(i).getBike();
-                dateTime = scooters.get(i).getTime();
-                cycle = scooters.get(i).getCycle();
-                scooterDtos.add(new ScooterRecordResponseDto(scooters.get(i)));
-                scooterDtos.clear();
-            }
-            else if(cycle != scooters.get(i).getCycle()){
-                records.add(new Record(bike,dateTime,scooterDtos));
-                scooterDtos.clear();
-                scooterDtos.add(new ScooterRecordResponseDto(scooters.get(i)));
-                bike = scooters.get(i).getBike(); dateTime = scooters.get(i).getTime();
-                cycle = scooters.get(i).getCycle();
-            }
-            else{
-                scooterDtos.add(new ScooterRecordResponseDto((scooters.get(i))));
-            }
-        }
-        records.add(new Record(bike,dateTime,scooterDtos));
-        return records;
-    }
-
     @Data
     @AllArgsConstructor
     static class Result<T> {
