@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
@@ -16,18 +14,20 @@ public class Rental {
 
     @Id @GeneratedValue
     private Long id;
-    private String identity;
-    private String bikeNum;
+    @ManyToOne @JoinColumn(name = "member_id")
+    private Member member;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Long price;
+    private int price;
+    @OneToOne(mappedBy = "rental")
+    private Scooter scooter;
 
     @Builder
-    public Rental(String identity, String bikeNum,LocalDate startDate, LocalDate endDate, Long price) {
-        this.identity = identity;
-        this.bikeNum = bikeNum;
+    public Rental(Member member, LocalDate startDate, LocalDate endDate, int price, Scooter scooter) {
+        this.member = member;
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
+        this.scooter = scooter;
     }
 }

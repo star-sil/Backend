@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
 @Getter
 @Entity
-@Table(name = "test")
 @NoArgsConstructor
 public class Scooter {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +28,14 @@ public class Scooter {
     private Status status;
     private int shock;
     private LocalDateTime time;
-    private Long cycle;
+
+    @OneToOne @JoinColumn(name = "rental_id")
+    private Rental rental;
+    @ManyToOne @JoinColumn(name = "driveLog_id")
+    private DriveLog driveLog;
 
     @Builder
-    public Scooter(String identity,String bike, String stat, int soc, double volt, int temp, double lat, double lon, String pow, Status status, int shock, LocalDateTime time, Long cycle) {
+    public Scooter(String identity,String bike, String stat, int soc, double volt, int temp, double lat, double lon, String pow, Status status, int shock, LocalDateTime time) {
         this.identity = identity;
         this.bike = bike;
         this.stat = stat;
@@ -46,6 +48,5 @@ public class Scooter {
         this.status = status;
         this.shock = shock;
         this.time = time;
-        this.cycle = cycle;
     }
 }

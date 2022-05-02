@@ -1,5 +1,5 @@
 package com.example.Dokkaebi.domain;
 
-public enum Sex {
+public enum Gender {
     MALE,FEMALE
 }

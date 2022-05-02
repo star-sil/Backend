@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor
 public class Member {
     @Id @GeneratedValue
-    @Column(name = "member_id")
     private Long id;
 
     private String name;
@@ -24,12 +24,14 @@ public class Member {
     private String birth;
 
     @Enumerated(EnumType.STRING)
-    private Sex sex;
+    private Gender gender;
     @Enumerated(EnumType.STRING)
     private Auth auth;
 
+
+
     @Builder
-    public Member(String name, String identity, String password, String city, String street, String phone, String email, String birth, Sex sex, Auth auth) {
+    public Member(String name, String identity, String password, String city, String street, String phone, String email, String birth, Gender gender, Auth auth) {
         this.name = name;
         this.identity = identity;
         this.password = password;
@@ -38,7 +40,7 @@ public class Member {
         this.phone = phone;
         this.email = email;
         this.birth = birth;
-        this.sex = sex;
+        this.gender = gender;
         this.auth = auth;
     }
 }
