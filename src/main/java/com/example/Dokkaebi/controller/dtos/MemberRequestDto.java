@@ -2,12 +2,10 @@ package com.example.Dokkaebi.controller.dtos;
 
 import com.example.Dokkaebi.domain.Auth;
 import com.example.Dokkaebi.domain.Member;
-import com.example.Dokkaebi.domain.Sex;
-import lombok.AllArgsConstructor;
+import com.example.Dokkaebi.domain.Gender;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 @Getter
 @NoArgsConstructor
@@ -20,7 +18,7 @@ public class MemberRequestDto {
     private String phone;
     private String email;
     private String birth;
-    private Sex sex;
+    private Gender gender;
     private Auth auth;
 
     @Builder
@@ -33,7 +31,7 @@ public class MemberRequestDto {
         this.phone = member.getPhone();
         this.email = member.getEmail();
         this.birth = member.getBirth();
-        this.sex = member.getSex();
+        this.gender = member.getGender();
         this.auth = member.getAuth();
     }
 
@@ -47,7 +45,7 @@ public class MemberRequestDto {
                 .phone(phone)
                 .email(email)
                 .birth(birth)
-                .sex(sex)
+                .gender(gender)
                 .auth(auth)
                 .build();
     }
