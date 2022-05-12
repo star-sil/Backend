@@ -22,13 +22,4 @@ public class RentalRequestDto {
         return this.price;
     }
 
-    public Rental toEntity(){
-        return Rental.builder()
-                .identity(this.identity)
-                .bikeNum(this.bikeNum)
-                .startDate(this.startDate)
-                .endDate(this.endDate)
-                .price(this.price)
-                .build();
-    }
 }

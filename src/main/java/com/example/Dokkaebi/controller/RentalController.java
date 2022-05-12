@@ -19,11 +19,4 @@ public class RentalController {
     public long rentalPrice(@RequestBody RentalRequestDto rentalRequestDto) {
         return rentalRequestDto.calculatePrice();
     }
-
-    @PostMapping("/rental/new")
-    public void createRental(@RequestBody RentalRequestDto rentalRequestDto){
-        rentalRequestDto.calculatePrice();
-        Rental rental = rentalRequestDto.toEntity();
-        rentalService.joinRental(rental);
-    }
 }
