@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 public class Scooter {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String identity;
-    private String bike;
     private String stat;
     private int soc;
     private double volt;
@@ -24,20 +22,14 @@ public class Scooter {
     private double lat;
     private double lon;
     private String pow;
-    @Enumerated(EnumType.STRING)
-    private Status status;
     private int shock;
     private LocalDateTime time;
-
-    @OneToOne @JoinColumn(name = "rental_id")
-    private Rental rental;
     @ManyToOne @JoinColumn(name = "driveLog_id")
     private DriveLog driveLog;
 
     @Builder
-    public Scooter(String identity,String bike, String stat, int soc, double volt, int temp, double lat, double lon, String pow, Status status, int shock, LocalDateTime time) {
+    public Scooter(String identity, String stat, int soc, double volt, int temp, double lat, double lon, String pow, int shock, LocalDateTime time, DriveLog driveLog) {
         this.identity = identity;
-        this.bike = bike;
         this.stat = stat;
         this.soc = soc;
         this.volt = volt;
@@ -45,8 +37,8 @@ public class Scooter {
         this.lat = lat;
         this.lon = lon;
         this.pow = pow;
-        this.status = status;
         this.shock = shock;
         this.time = time;
+        this.driveLog = driveLog;
     }
 }
