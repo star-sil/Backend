@@ -14,23 +14,18 @@ import java.util.List;
 public class DriveLog {
     @Id @GeneratedValue
     private Long id;
-    private String identity;
     private int cycle;
+
     @OneToMany(mappedBy = "driveLog")
     private List<Scooter> scooters = new ArrayList<>();
 
+    @ManyToOne @JoinColumn(name = "rental")
+    private Rental rental;
+
     @Builder
-    public DriveLog(Scooter scooter, int cycle) {
-        this.identity = scooter.getIdentity();
+    public DriveLog(int cycle, Scooter scooter, Rental rental) {
         this.cycle = cycle;
-    }
-
-    public void startDrive(Scooter scooter) {
-        this.cycle += 1;
-        scooters.add(scooter);
-    }
-
-    public void addLog(Scooter scooter) {
         this.scooters.add(scooter);
+        this.rental = rental;
     }
 }
