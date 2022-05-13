@@ -19,15 +19,15 @@ public class Rental {
     private LocalDate startDate;
     private LocalDate endDate;
     private int price;
-    @OneToOne(mappedBy = "rental")
-    private Scooter scooter;
+    @ManyToOne @JoinColumn(name = "scooter_state_id")
+    private ScooterState scooterState;
 
     @Builder
-    public Rental(Member member, LocalDate startDate, LocalDate endDate, int price, Scooter scooter) {
+    public Rental(Member member, LocalDate startDate, LocalDate endDate, int price, ScooterState scooterState) {
         this.member = member;
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
-        this.scooter = scooter;
+        this.scooterState = scooterState;
     }
 }
