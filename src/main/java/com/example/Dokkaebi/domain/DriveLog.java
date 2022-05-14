@@ -19,7 +19,7 @@ public class DriveLog {
     @OneToMany(mappedBy = "driveLog")
     private List<Scooter> scooters = new ArrayList<>();
 
-    @ManyToOne @JoinColumn(name = "rental")
+    @ManyToOne @JoinColumn(name = "rental_id")
     private Rental rental;
 
     @Builder

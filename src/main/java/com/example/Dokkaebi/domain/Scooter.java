@@ -24,7 +24,7 @@ public class Scooter {
     private String pow;
     private int shock;
     private LocalDateTime time;
-    @ManyToOne @JoinColumn(name = "driveLog_id")
+    @ManyToOne @JoinColumn(name = "drive_log_id")
     private DriveLog driveLog;
 
     @Builder
