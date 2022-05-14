@@ -16,7 +16,7 @@ public class ScooterService {
     private final ScooterRepository ScooterRepo;
 
     public List<Scooter> findScooter(Scooter scooter) {
-        return ScooterRepo.findByBike(scooter.getBike());
+        return ScooterRepo.findByBike(scooter.getIdentity());
     }
 
     public List<Scooter> findAllScooter() {

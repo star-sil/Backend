@@ -1,5 +1,7 @@
 package com.example.Dokkaebi.domain;
 
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @NoArgsConstructor
 public class ScooterState {
@@ -20,6 +23,10 @@ public class ScooterState {
     @OneToMany
     private List<Rental> rentals = new ArrayList<>();
 
-
-
+    @Builder
+    public ScooterState(String identity, Status status, int cycle) {
+        this.identity = identity;
+        this.status = status;
+        this.cycle = cycle;
+    }
 }
