@@ -19,14 +19,14 @@ public class ScooterState {
     private Long id;
     private String identity;
     private Status status;
-    private int cycle;
+    private int useCount;
     @OneToMany
     private List<Rental> rentals = new ArrayList<>();
 
     @Builder
-    public ScooterState(String identity, Status status, int cycle) {
+    public ScooterState(String identity, Status status, int useCount) {
         this.identity = identity;
         this.status = status;
-        this.cycle = cycle;
+        this.useCount = useCount;
     }
 }

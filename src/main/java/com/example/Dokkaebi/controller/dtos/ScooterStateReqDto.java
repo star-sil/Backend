@@ -15,7 +15,7 @@ public class ScooterStateReqDto {
         return ScooterState.builder()
                         .identity(identity)
                         .status(Status.NONE)
-                        .cycle(0)
+                        .useCount(0)
                         .build();
     }
 }

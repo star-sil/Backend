@@ -14,7 +14,7 @@ import java.util.List;
 public class DriveLog {
     @Id @GeneratedValue
     private Long id;
-    private int cycle;
+    private int useCount;
 
     @OneToMany(mappedBy = "driveLog")
     private List<Scooter> scooters = new ArrayList<>();
@@ -23,8 +23,8 @@ public class DriveLog {
     private Rental rental;
 
     @Builder
-    public DriveLog(int cycle, Scooter scooter, Rental rental) {
-        this.cycle = cycle;
+    public DriveLog(int useCount, Scooter scooter, Rental rental) {
+        this.useCount = useCount;
         this.scooters.add(scooter);
         this.rental = rental;
     }
