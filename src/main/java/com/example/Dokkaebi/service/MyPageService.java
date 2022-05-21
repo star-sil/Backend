@@ -31,6 +31,6 @@ public class MyPageService {
     @Transactional
     public MyPageResponse viewMyPage(Long memberId){
         Member member = memberRepository.findOne(memberId);
-        return new MyPageResponse(jpaRentalRepo.findByMember(member));
+        return new MyPageResponse(jpaRentalRepo.findByMember(member), member);
     }
 }

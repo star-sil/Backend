@@ -4,10 +4,13 @@ import com.example.Dokkaebi.controller.dtos.LoginRequestDto;
 import com.example.Dokkaebi.controller.dtos.MemberRequestDto;
 import com.example.Dokkaebi.controller.dtos.TokenRequestDto;
 import com.example.Dokkaebi.controller.dtos.TokenResponseDto;
+import com.example.Dokkaebi.controller.dtos.response.MyPageResponse;
 import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import com.example.Dokkaebi.service.MemberService;
+import com.example.Dokkaebi.service.MyPageService;
 import com.example.Dokkaebi.service.TokenService;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +30,7 @@ public class MemberController {
 
     @Value("${key.token}")
     private String key;
-
+    private final MyPageService myPageService;
     private final MemberService memberservice;
     private final TokenService tokenService;
 
@@ -88,6 +91,13 @@ public class MemberController {
     }
     //삭제는 염두해 두지 않음. 탈퇴의 결과는 조금 더 생각해 봐야 할 듯.
 
+    @GetMapping("/mypage/{id}")
+    @ResponseBody
+    @ApiOperation(value="마이페이지 조회", notes = "주어진 id로 마이페이지 조회")
+    public ResponseEntity<MyPageResponse> viewMyPage(@PathVariable Long memberId){
+        MyPageResponse myPageResponse = myPageService.viewMyPage(memberId);
+        return ResponseEntity.ok(myPageResponse);
+    }
     @Data
     @AllArgsConstructor
     static class Result<T> {
