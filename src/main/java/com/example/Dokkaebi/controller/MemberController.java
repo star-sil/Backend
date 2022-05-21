@@ -27,7 +27,6 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
-
     @Value("${key.token}")
     private String key;
     private final MyPageService myPageService;
