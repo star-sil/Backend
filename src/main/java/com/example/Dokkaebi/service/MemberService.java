@@ -1,7 +1,9 @@
 package com.example.Dokkaebi.service;
 
+import com.example.Dokkaebi.Repository.JpaRepo.JpaMemberRepo;
 import com.example.Dokkaebi.Repository.MemberRepository;
 import com.example.Dokkaebi.Repository.TokenRepository;
+import com.example.Dokkaebi.controller.dtos.MemberRequestDto;
 import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository MemberRepo;
+    private final JpaMemberRepo jpaMemberRepo;
 
     @Transactional
     public Long join(Member member) {
@@ -40,6 +43,13 @@ public class MemberService {
         } else {
             return false;
         }
+    }
+
+    public void updateMember(MemberRequestDto memberRequestDto){
+        Member member = jpaMemberRepo
+                .findByIdentity(memberRequestDto.getIdentity());
+        member.updateFromRequest(memberRequestDto);
+        jpaMemberRepo.save(member);
     }
 
 }

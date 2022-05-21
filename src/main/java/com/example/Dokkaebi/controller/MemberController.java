@@ -77,6 +77,17 @@ public class MemberController {
 
     }
 
+    @PutMapping("/member")
+    @ResponseBody
+    public String modifyInfo(
+            //@RequestHeader(value = "access_token")String accessToken,
+            //추후 토큰 인증을 통해 정보 변경 권한 확인하기
+            @RequestBody MemberRequestDto memberRequestDto){
+        memberservice.updateMember(memberRequestDto);
+        return "회원 정보가 성공적으로 변경되었습니다.";
+    }
+    //삭제는 염두해 두지 않음. 탈퇴의 결과는 조금 더 생각해 봐야 할 듯.
+
     @Data
     @AllArgsConstructor
     static class Result<T> {
