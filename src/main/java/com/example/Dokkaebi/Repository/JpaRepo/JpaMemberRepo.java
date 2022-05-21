@@ -11,4 +11,5 @@ public interface JpaMemberRepo extends JpaRepository<Member,Long> {
     List<CrudEntity> searchParamRepo(@Param("name") String name);
     위와 같은 방법으로 Query를 직접 쓸 수도 있지만, 어느정도 한계가 있음..
     */
+    Member findByIdentity(String identity);
 }
