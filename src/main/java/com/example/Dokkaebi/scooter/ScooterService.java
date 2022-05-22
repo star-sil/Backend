@@ -35,9 +35,7 @@ public class ScooterService {
 
     public DriveLogDto checkDriveLog(String identity, int useCount) {
         DriveLog driveLog = driveLogRepo.findLogByIdentityAndUseCount(identity, useCount).get(0);
-        return new DriveLogDto(driveLog.getStartTime(),driveLog.calculateDist(),
-                driveLog.getScooters().get(driveLog.getScooters().size()-1).getLat(),
-                driveLog.getScooters().get(driveLog.getScooters().size()-1).getLon());
+        return new DriveLogDto(driveLog);
     }
 
     public List<Scooter> findScooter(Scooter scooter) {
