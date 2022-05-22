@@ -11,9 +11,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 public class Member {
-    @Id @GeneratedValue
+    @Id @GeneratedValue @Column(name="member_id")
     private Long id;
-
     private String name;
     private String identity;
     private String password;
