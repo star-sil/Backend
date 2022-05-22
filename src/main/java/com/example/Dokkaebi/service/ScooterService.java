@@ -1,7 +1,13 @@
 package com.example.Dokkaebi.service;
 
+import com.example.Dokkaebi.Repository.DriveLogRepo;
 import com.example.Dokkaebi.Repository.ScooterRepository;
+import com.example.Dokkaebi.Repository.ScooterStateRepo;
+import com.example.Dokkaebi.controller.dtos.DriveLogDto;
+import com.example.Dokkaebi.controller.dtos.ScooterStateReqDto;
+import com.example.Dokkaebi.domain.DriveLog;
 import com.example.Dokkaebi.domain.Scooter;
+import com.example.Dokkaebi.domain.ScooterState;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,21 +19,42 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ScooterService {
-    private final ScooterRepository ScooterRepo;
+    private final ScooterRepository scooterRepo;
+    private final ScooterStateRepo scooterStateRepo;
+    private final DriveLogRepo driveLogRepo;
+
+    public List<ScooterState> findAll() {
+        return scooterStateRepo.findAll();
+    }
+
+    @Transactional
+    public void enroll(ScooterStateReqDto scooterStateReqDto) throws Exception {
+        if(scooterStateRepo.findOne(scooterStateReqDto.getIdentity()).isEmpty()){
+            scooterStateRepo.save(scooterStateReqDto.toEntity());
+        } else{
+            throw new Exception("이미 해당 스쿠터가 등록되어 있습니다.");
+        }
+    }
+
+    public DriveLogDto checkDriveLog(String identity, int useCount) {
+        DriveLog driveLog = driveLogRepo.findLogByIdentityAndUseCount(identity, useCount).get(0);
+        return new DriveLogDto(driveLog.getStartTime(),driveLog.calculateDist(),
+                driveLog.getScooters().get(driveLog.getScooters().size()-1).getLat(),
+                driveLog.getScooters().get(driveLog.getScooters().size()-1).getLon());
+    }
 
     public List<Scooter> findScooter(Scooter scooter) {
-        return ScooterRepo.findByBike(scooter.getIdentity());
+        return scooterRepo.findByBike(scooter.getIdentity());
     }
 
     public List<Scooter> findAllScooter() {
         List<String> bikes = new ArrayList<>();
         bikes.add("0001"); bikes.add("0002"); bikes.add("0003"); bikes.add("0004");
         bikes.add("0005"); bikes.add("0006");
-        return ScooterRepo.findAllByBike(bikes);
+        return scooterRepo.findAllByBike(bikes);
     }
 
     public List<Scooter> findScooterByIdentity(String identity){
-        return ScooterRepo.findBikeByIdentity(identity);
+        return scooterRepo.findBikeByIdentity(identity);
     }
-
 }
