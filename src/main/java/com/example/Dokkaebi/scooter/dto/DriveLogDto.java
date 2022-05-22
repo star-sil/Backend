@@ -1,7 +1,7 @@
 package com.example.Dokkaebi.scooter.dto;
 
-import com.example.Dokkaebi.domain.DriveLog;
-import com.example.Dokkaebi.domain.Scooter;
+import com.example.Dokkaebi.scooter.entity.DriveLog;
+import com.example.Dokkaebi.scooter.entity.Scooter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
