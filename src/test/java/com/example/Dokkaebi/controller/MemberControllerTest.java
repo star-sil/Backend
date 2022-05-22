@@ -1,10 +1,10 @@
 package com.example.Dokkaebi.controller;
 
-import com.example.Dokkaebi.Repository.MemberRepository;
-import com.example.Dokkaebi.controller.dtos.MemberRequestDto;
-import com.example.Dokkaebi.domain.Auth;
-import com.example.Dokkaebi.domain.Member;
-import com.example.Dokkaebi.service.MemberService;
+import com.example.Dokkaebi.member.MemberRepository;
+import com.example.Dokkaebi.member.MemberRequestDto;
+import com.example.Dokkaebi.member.Auth;
+import com.example.Dokkaebi.member.Member;
+import com.example.Dokkaebi.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
