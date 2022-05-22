@@ -8,6 +8,7 @@ import com.example.Dokkaebi.domain.Member;
 import com.example.Dokkaebi.domain.Token;
 import com.example.Dokkaebi.service.MemberService;
 import com.example.Dokkaebi.service.TokenService;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class MemberController {
     private final MemberService memberservice;
     private final TokenService tokenService;
 
+    @ApiOperation(value = "회원 가입", notes = "성공하면 memberId 반환")
     @PostMapping("/member/new")
     public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberRequestDto) {
         Member member = memberRequestDto.toEntity();
@@ -42,20 +44,25 @@ public class MemberController {
         return new ResponseEntity(memberId, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "로그인", notes = "성공하면 access, refresh 토큰 반환")
     @PostMapping("/member/login")
-    public ResponseEntity<Object> loginMember(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<TokenResponseDto> loginMember(@RequestBody LoginRequestDto loginRequestDto) {
         Member member = memberservice.findMember(loginRequestDto.getIdentity());
         if(member.getIdentity() == null) return new ResponseEntity("not exist identity", HttpStatus.BAD_REQUEST);
         else{
             TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
             tokenService.Join(tokenResponseDto.toEntity());
-            return new ResponseEntity(new Result(tokenResponseDto),HttpStatus.OK);
+            return ResponseEntity.ok(tokenResponseDto);
         }
     }
 
+    @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
     @ResponseBody
-    public ResponseEntity<Object> reissueToken(@RequestHeader(value = "access_token") String accessToken, @RequestHeader(value = "refresh_token") String refreshToken) {
+    public ResponseEntity<Object> reissueToken(
+            @RequestHeader(value = "access_token") String accessToken,
+            @RequestHeader(value = "refresh_token") String refreshToken) {
+
         TokenRequestDto tokenRequestDto = new TokenRequestDto(accessToken, refreshToken,key);
         if(tokenRequestDto.isValid(refreshToken)){
             List<Token> tokens = tokenService.findToken(refreshToken);
