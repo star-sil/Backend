@@ -1,5 +1,6 @@
 package com.example.Dokkaebi.member;
 
+import com.example.Dokkaebi.token.Token;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ public class Member {
     @Id @GeneratedValue @Column(name="member_id")
     private Long id;
     private String name;
+    @Column(unique = true)
     private String identity;
     private String password;
     private String city;
@@ -21,6 +23,9 @@ public class Member {
     private String email;
     private String birth;
 
+    @OneToOne
+    @JoinColumn(name="token_id")
+    private Token token;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Enumerated(EnumType.STRING)

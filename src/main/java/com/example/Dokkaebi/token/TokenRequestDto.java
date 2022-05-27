@@ -17,24 +17,9 @@ public class TokenRequestDto {
 
     private String accessJws;
     private String refreshJws;
-    private String key;
 
-    @Builder
-    public TokenRequestDto(String accessJws, String refreshJws, String key) {
+    public TokenRequestDto(String accessJws, String refreshJws) {
         this.accessJws = accessJws;
         this.refreshJws = refreshJws;
-        this.key = key;
     }
-
-    public boolean isValid(String jwtToken) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(key.getBytes()).parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            log.info(e.toString());
-            return false;
-        }
-    }
-
-
 }
