@@ -1,5 +1,7 @@
 package com.example.Dokkaebi.member;
 
+import com.example.Dokkaebi.exception.ApiException;
+import com.example.Dokkaebi.exception.ExceptionEnum;
 import com.example.Dokkaebi.token.TokenRequestDto;
 import com.example.Dokkaebi.token.TokenResponseDto;
 import com.example.Dokkaebi.help.dto.MyPageResponse;
@@ -36,41 +38,48 @@ public class MemberController {
         Long memberId = memberservice.join(member);
         if (memberId == -1L) {
             return new ResponseEntity("duplicate identity", HttpStatus.BAD_REQUEST);
-        }
-        //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
-        return new ResponseEntity(memberId, HttpStatus.OK);
-    }
+        }else{
+            Token token = Token.builder().member(member).build();
+            tokenService.Join(token);
 
+            //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
+            return new ResponseEntity(memberId, HttpStatus.OK);
+        }
+    }
     @ApiOperation(value = "로그인", notes = "성공하면 access, refresh 토큰 반환")
     @PostMapping("/member/login")
     public ResponseEntity<TokenResponseDto> loginMember(@RequestBody LoginRequestDto loginRequestDto) {
-        Member member = memberservice.findMember(loginRequestDto.getIdentity());
-        if(member.getIdentity() == null) return new ResponseEntity("not exist identity", HttpStatus.BAD_REQUEST);
-        else{
-            TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
-            tokenService.Join(tokenResponseDto.toEntity());
+        Member member = memberservice.findMember2(loginRequestDto.getIdentity());
+        //비밀번호 검증 로직 필요 (member service 내에 구현)
+        if(member==null){
+            throw new ApiException(ExceptionEnum.IdentityNotMatched);
+        }else{
+            String accessToken = tokenService.makeAccessJws(member);
+            String refreshToken = tokenService.makeRefreshJws();
+
+            //추후 수정 필요..
+            TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken,member);
+            Token token = tokenService.findTokenByMember(member);
+            //refresh 토큰 업데이트
+            token.refresh(refreshToken);
+            tokenService.Join(token);
             return ResponseEntity.ok(tokenResponseDto);
         }
     }
-
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
     @ResponseBody
     public ResponseEntity<Object> reissueToken(
             @RequestHeader(value = "access_token") String accessToken,
-            @RequestHeader(value = "refresh_token") String refreshToken) {
+            @RequestHeader(value = "refresh_token") String refreshToken,
+            @RequestBody String identity) {
 
-        TokenRequestDto tokenRequestDto = new TokenRequestDto(accessToken, refreshToken,key);
-        if(tokenRequestDto.isValid(refreshToken)){
-            List<Token> tokens = tokenService.findToken(refreshToken);
-            if(tokens.isEmpty()) return new ResponseEntity("invalid refreshToken", HttpStatus.BAD_REQUEST);
-            else{
-                String identityOfToken = tokenService.encodeToken(accessToken);
-                Member member = memberservice.findMember(identityOfToken);
-                TokenResponseDto tokenResponseDto = new TokenResponseDto(member,key);
-                return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
-            }
-        } else return new ResponseEntity("invalid Token", HttpStatus.BAD_REQUEST);
+        //여기 좀 수정 필요할 수도..
+        accessToken = tokenService.refreshProcess(accessToken,refreshToken,identity);
+        Member member = memberservice.findMember(identity);
+
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken,member);
+        return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
     }
 
     //권한 주기기능은 https://llshl.tistory.com/28?category=942328 참고

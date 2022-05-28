@@ -31,16 +31,23 @@ public class SwaggerConfig {
 //        해당소스는 모든 API 테스트시 header에 'Autorization' 이라는 값을 추가하도록 했다.
     @Bean
     public Docket api() {
-        Parameter parameterBuilder = new ParameterBuilder()
-                .name(HttpHeaders.AUTHORIZATION)
-                .description("Access Tocken")
+        Parameter accessTokenBuilder = new ParameterBuilder()
+                .name("access_token")
+                .description("access_token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
                 .required(false)
                 .build();
-
+        Parameter refreshTokenBuilder = new ParameterBuilder()
+                .name("refresh_token")
+                .description("refresh_token")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header")
+                .required(false)
+                .build();
         List<Parameter> globalParamters = new ArrayList<>();
-        globalParamters.add(parameterBuilder);
+        globalParamters.add(accessTokenBuilder);
+        globalParamters.add(refreshTokenBuilder);
 
 //        PathSelectors.any()
 //        해당 package 하위에 있는 모든 url에 적용시킨다. /test/**로시작되는 부분만 적용해주고싶다면
