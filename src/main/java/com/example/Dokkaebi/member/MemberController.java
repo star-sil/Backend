@@ -101,11 +101,11 @@ public class MemberController {
     }
     //삭제는 염두해 두지 않음. 탈퇴의 결과는 조금 더 생각해 봐야 할 듯.
 
-    @GetMapping("/mypage/{id}")
+    @GetMapping("/mypage/{identity}")
     @ResponseBody
     @ApiOperation(value="마이페이지 조회", notes = "주어진 id로 마이페이지 조회")
-    public ResponseEntity<MyPageResponse> viewMyPage(@PathVariable Long memberId){
-        MyPageResponse myPageResponse = myPageService.viewMyPage(memberId);
+    public ResponseEntity<MyPageResponse> viewMyPage(@PathVariable(name = "identity") String identity){
+        MyPageResponse myPageResponse = myPageService.viewMyPage(identity);
         return ResponseEntity.ok(myPageResponse);
     }
     @Data

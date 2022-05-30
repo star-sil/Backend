@@ -15,7 +15,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         //적용할 url 패턴
-        registry.addMapping("/**");
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .maxAge(3600);
     }
     @Override
     public void addInterceptors(InterceptorRegistry registry){

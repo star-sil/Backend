@@ -1,15 +1,18 @@
 package com.example.Dokkaebi.help;
 
+import com.example.Dokkaebi.member.JpaMemberRepo;
 import com.example.Dokkaebi.rental.JpaRentalRepo;
 import com.example.Dokkaebi.member.MemberRepository;
 import com.example.Dokkaebi.rental.JpaRentalRepoSupport;
 import com.example.Dokkaebi.help.dto.MyPageResponse;
 import com.example.Dokkaebi.member.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 /*
@@ -20,6 +23,7 @@ impl 클래스를 여러가지 만들어 interface 를 사용한다. (예, 로�
 public class MyPageService {
     private final JpaRentalRepo jpaRentalRepo;
     private final JpaRentalRepoSupport jpaRentalRepoSupport;
+    private final JpaMemberRepo jpaMemberRepo;
     //일반 EntityManager 호출
     private final MemberRepository memberRepository;
 
@@ -29,8 +33,8 @@ public class MyPageService {
 //        return new MyPageResponse(jpaRentalRepoSupport.findByMemberId(memberId));
 //    }
     @Transactional
-    public MyPageResponse viewMyPage(Long memberId){
-        Member member = memberRepository.findOne(memberId);
+    public MyPageResponse viewMyPage(String identity){
+        Member member = jpaMemberRepo.findByIdentity(identity);
         return new MyPageResponse(jpaRentalRepo.findByMember(member), member);
     }
 }

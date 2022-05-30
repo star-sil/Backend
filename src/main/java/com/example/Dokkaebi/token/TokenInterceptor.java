@@ -18,6 +18,10 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
         String accessToken = request.getHeader("access_token");
+        //https://velog.io/@suhongkim98/jwt-interceptor-CORS-preflight-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0
+        if(request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
         if(accessToken==null){
             throw new ApiException(ExceptionEnum.InvalidToken);
         }
