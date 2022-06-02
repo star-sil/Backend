@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +31,15 @@ public class MemberController {
     private final MyPageService myPageService;
     private final MemberService memberservice;
     private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder; 
+    // 비밀번호 암호화를 위해 기본적으로 제공되는 security 내장 인코더
+    // 이지만, DokkaebiApplication 의 passwordEncoder 에 의해 새로 주입됨.
 
     @ApiOperation(value = "회원 가입", notes = "성공하면 memberId 반환")
     @PostMapping("/member/new")
     public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberRequestDto) {
+        // dto 레벨에서 encoder 를 쓰지는 않으니까..
+        memberRequestDto.encodePassword(passwordEncoder.encode(memberRequestDto.getPassword()));
         Member member = memberRequestDto.toEntity();
         Long memberId = memberservice.join(member);
         if (memberId == -1L) {
@@ -50,20 +56,28 @@ public class MemberController {
     @PostMapping("/member/login")
     public ResponseEntity<TokenResponseDto> loginMember(@RequestBody LoginRequestDto loginRequestDto) {
         Member member = memberservice.findMember2(loginRequestDto.getIdentity());
-        //비밀번호 검증 로직 필요 (member service 내에 구현)
+        // 아이디에 맞는 사람이 없거나
         if(member==null){
+            log.error("엑 안맞네");
             throw new ApiException(ExceptionEnum.IdentityNotMatched);
         }else{
-            String accessToken = tokenService.makeAccessJws(member);
-            String refreshToken = tokenService.makeRefreshJws();
+            // 인코더를 사용하여 평문 암호와 저장된 암호문을 비교하여 boolean 리턴
+            if(passwordEncoder.matches(loginRequestDto.getPassword(),member.getPassword())){
+                String accessToken = tokenService.makeAccessJws(member);
+                String refreshToken = tokenService.makeRefreshJws();
 
-            //추후 수정 필요..
-            TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken,member);
-            Token token = tokenService.findTokenByMember(member);
-            //refresh 토큰 업데이트
-            token.refresh(refreshToken);
-            tokenService.Join(token);
-            return ResponseEntity.ok(tokenResponseDto);
+                //추후 수정 필요..
+                TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken,member);
+                Token token = tokenService.findTokenByMember(member);
+                //refresh 토큰 업데이트
+                token.refresh(refreshToken);
+                tokenService.Join(token);
+                return ResponseEntity.ok(tokenResponseDto);
+            }else {
+                log.error("엑 안맞네 여기도 아니야?");
+                // 비밀번호 틀리면 예외처리
+                throw new ApiException(ExceptionEnum.IdentityNotMatched);
+            }
         }
     }
     @ApiOperation(value = "토큰 재발급")

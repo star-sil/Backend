@@ -4,6 +4,9 @@ import com.example.Dokkaebi.exception.ApiException;
 import com.example.Dokkaebi.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
     private final MemberRepository MemberRepo;
     private final JpaMemberRepo jpaMemberRepo;
 
@@ -47,6 +50,12 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member findMember2(String identity){
+        return jpaMemberRepo.findByIdentity(identity);
+    }
+
+    @Override
+    // UserDetailsService 를 상속하여 해당 메소드를 구현해야지만 사용가능하다.
+    public UserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
         return jpaMemberRepo.findByIdentity(identity);
     }
 }

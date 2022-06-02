@@ -4,17 +4,24 @@ import com.example.Dokkaebi.exception.ApiException;
 import com.example.Dokkaebi.exception.ExceptionEnum;
 import com.example.Dokkaebi.member.JpaMemberRepo;
 import com.example.Dokkaebi.member.Member;
+import com.example.Dokkaebi.member.MemberService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -24,6 +31,7 @@ public class TokenService {
     private final TokenRepository TokenRepo;
     private final JpaMemberRepo jpaMemberRepo;
     private final JpaTokenRepo jpaTokenRepo;
+    private final MemberService memberService;
 
     @Value("${key.token}")
     private String key;
@@ -54,6 +62,17 @@ public class TokenService {
                 .claim("userIdentity",member.getIdentity())
                 .signWith(SignatureAlgorithm.HS256,key)
                 .compact();
+    }
+    // 토큰으로 인증 조회
+    public Authentication getAuthentication(String accessToken){
+        List Authorizes = new ArrayList();
+        String identity = this.getIdentityFromToken(accessToken);
+        Member member = (Member) memberService.loadUserByUsername(identity);
+        // userDetails 클래스 형태의 Member 를 가져와서 형 변환 해준다.
+
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(member.getAuth().getRole());
+        Authorizes.add(simpleGrantedAuthority);
+        return new UsernamePasswordAuthenticationToken(member,"",Authorizes);
     }
 
     public String getIdentityFromToken(String accessToken){
