@@ -18,6 +18,9 @@ public class MemberRequestDto {
     private Gender gender;
     private Auth auth;
 
+    public void encodePassword(String encodedPassword){
+        this.password = encodedPassword;
+    }
     @Builder
     public MemberRequestDto(Member member) {
         this.name = member.getName();
