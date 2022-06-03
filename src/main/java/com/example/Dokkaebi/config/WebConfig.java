@@ -1,25 +1,16 @@
 package com.example.Dokkaebi.config;
 
-import com.example.Dokkaebi.token.TokenInterceptor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Autowired
-    private TokenInterceptor tokenInterceptor;
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        //적용할 url 패턴
-        registry.addMapping("/**");
-    }
-    @Override
-    public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/mypage/**");
-    }
 }
