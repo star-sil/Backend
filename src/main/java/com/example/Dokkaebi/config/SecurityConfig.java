@@ -19,6 +19,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -44,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 기존에 사용하던 BCryptPasswordEncoder 단방향 인코딩을 지원했는데
         // 다양한 알고리즘에 대한 복호화를 단방향으로 지원해주는 것으로 대충 생각하자.
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -62,12 +69,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 그래서 세션이 꺼지는 거군
 
                 .and()
-                .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
-                .antMatchers("/member/new", "/member/login","/member/reissue").permitAll()
+                .authorizeRequests()
+                // 다음 리퀘스트에 대한 사용권한 체크
+                .antMatchers("/member/new", "/member/login","/member/reissue","/exception/**").permitAll()
                 // 로그인이나 회원가입은 다 허용
-                .antMatchers(HttpMethod.GET,  "/swagger-ui.html/**","/exception/**","/helloworld/**").permitAll()
+                .antMatchers(HttpMethod.GET,  "/swagger-ui.html/**","/helloworld/**").permitAll()
                 // 위 경로로 시작하는 get 요청 리소스는 누구나 접근 가능
-                .anyRequest().hasAuthority(Auth.USER.getRole())
+//                .anyRequest().hasAnyAuthority(Auth.USER.getRole(),Auth.ADMIN.getRole())
                 // 와우 hasRole 은 string 으로 ROLE_ 이 앞에 알아서 붙음;;
                 // 그래서 hasAuthority 로 바꿈..
                 // 그 외 나머지 요청은 모두 인증된 회원만 접근 가능
@@ -83,11 +91,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenService),
                         UsernamePasswordAuthenticationFilter.class);
-                // spring security 에서 관리하는 인증 필터 단계에 jwt 토큰 필터 삽입
+        // spring security 에서 관리하는 인증 필터 단계에 jwt 토큰 필터 삽입
     }
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**",
                 "/swagger-ui.html", "/webjars/**", "/swagger/**");
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

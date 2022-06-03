@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class HelpController {
     }
 
     @PutMapping("/help/qna/")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation(value = "관리자 문의사항 조회 시", notes = "관리자가 문의사항 조회 시 호출")
     public ResponseEntity confirmQna(@RequestBody QnaReqDto qnaReqDto) throws Exception {
         qnaService.confirm(qnaReqDto);
