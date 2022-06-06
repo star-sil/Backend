@@ -31,7 +31,7 @@ public class DriveLogDto {
     @AllArgsConstructor
     private class Route {
         double lat;
-        double lon;
+        double lng;
     }
 }
 
