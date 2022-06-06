@@ -1,6 +1,7 @@
-package com.example.Dokkaebi.help;
+package com.example.Dokkaebi.help.Qna;
 
-import com.example.Dokkaebi.help.Qna;
+import com.example.Dokkaebi.exception.ApiException;
+import com.example.Dokkaebi.exception.ExceptionEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +24,7 @@ public class QnaRepository {
                 .setParameter("id", id)
                 .getResultList();
         if(qnaes.isEmpty()){
-            throw new Exception("id에 맞는 문의사항이 존재하지 않습니다.");
+            throw new ApiException(ExceptionEnum.InvalidQnaId);
         }
         else{
             return qnaes.get(0);

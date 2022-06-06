@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 public class Rental {
-
     @Id @GeneratedValue
     private Long id;
     @ManyToOne @JoinColumn(name = "member_id")
