@@ -41,4 +41,4 @@ application-dev.yml
 /sql
 
 jdk-11.0.2
-
+*.DS_Store
