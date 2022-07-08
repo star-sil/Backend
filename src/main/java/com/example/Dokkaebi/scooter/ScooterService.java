@@ -68,7 +68,7 @@ public class ScooterService {
         String identity = tokenService.getIdentityFromToken(accessToken);
         Member member = memberService.findMember(identity);
         Rental rental = rentalService.findRental(member);
-        DriveLog driveLog = driveLogRepo.findLogByRental(rental).orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
+        DriveLog driveLog = driveLogRepo.findLogByRental(rental).get(0);
         return new ScooterLocationRes(driveLog.getScooters().get(0));
     }
 }

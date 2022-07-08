@@ -1,9 +1,11 @@
 package com.example.Dokkaebi.scooter.dto;
 
 import com.example.Dokkaebi.scooter.entity.Scooter;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class ScooterLocationRes {
     private double lat;
     private double lng;

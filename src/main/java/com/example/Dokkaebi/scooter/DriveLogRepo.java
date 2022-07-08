@@ -22,9 +22,9 @@ public class DriveLogRepo {
                 .getResultList();
     }
 
-    public Optional<DriveLog> findLogByRental(Rental rental) {
+    public List<DriveLog> findLogByRental(Rental rental) {
         return em.createQuery("select d from DriveLog d where d.rental = :rental",DriveLog.class)
                 .setParameter("rental",rental)
-                .getResultList().stream().findFirst();
+                .getResultList();
     }
 }

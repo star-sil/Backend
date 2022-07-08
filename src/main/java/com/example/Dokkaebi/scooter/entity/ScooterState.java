@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +16,7 @@ public class ScooterState {
     @Id @GeneratedValue
     private Long id;
     private String identity;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private int useCount;
     @OneToMany
