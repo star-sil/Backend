@@ -24,4 +24,9 @@ public class RentalController {
     public RentalHisResDto checkRental(@RequestHeader(value = "access_token") String accessToken) {
         return rentalService.findAllRentalByMember(accessToken);
     }
+
+    @GetMapping("/rental/{id}")
+    public RentalResDto checkRideHistory(@PathVariable Long id) {
+        return rentalService.findRentalById(id);
+    }
 }

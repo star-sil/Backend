@@ -58,4 +58,14 @@ public class RentalService {
         }
         return rentalHisResDto;
     }
+
+    public RentalResDto findRentalById(Long id) {
+        Rental rental = rentalRepo.findById(id);
+        List<DriveLog> driveLogs = driveLogRepo.findLogByRental(rental);
+        RentalResDto rentalResDto = new RentalResDto();
+        for (DriveLog driveLog : driveLogs) {
+            rentalResDto.addRideHistory(driveLog);
+        }
+        return rentalResDto;
+    }
 }

@@ -28,4 +28,7 @@ public class RentalRepository {
                 .getResultList();
     }
 
+    public Rental findById(Long id) {
+        return em.find(Rental.class, id);
+    }
 }
