@@ -30,4 +30,8 @@ public class ScooterState {
         this.status = status;
         this.useCount = useCount;
     }
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
 }

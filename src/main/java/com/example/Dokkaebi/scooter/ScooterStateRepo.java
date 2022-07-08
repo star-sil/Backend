@@ -1,6 +1,7 @@
 package com.example.Dokkaebi.scooter;
 
 import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.scooter.entity.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +26,11 @@ public class ScooterStateRepo {
 
     public void save(ScooterState scooterState) {
         em.persist(scooterState);
+    }
+
+    public List<ScooterState> findScootersByStatus(Status status) {
+        return em.createQuery("select s from ScooterState s where s.status = :status")
+                .setParameter("status",status)
+                .getResultList();
     }
 }

@@ -19,16 +19,16 @@ public class Rental {
     private Member member;
     private LocalDate startDate;
     private LocalDate endDate;
-    private int price;
+    private Long price;
     @ManyToOne @JoinColumn(name = "scooter_state_id")
     private ScooterState scooterState;
 
     @Builder
-    public Rental(Member member, LocalDate startDate, LocalDate endDate, int price, ScooterState scooterState) {
+    public Rental(Member member, RentalRequestDto rentalRequestDto, ScooterState scooterState) {
         this.member = member;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.price = price;
+        this.startDate = rentalRequestDto.getStartDate();
+        this.endDate = rentalRequestDto.getEndDate();
+        this.price = rentalRequestDto.getPrice();
         this.scooterState = scooterState;
     }
 }
