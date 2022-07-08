@@ -1,6 +1,7 @@
 package com.example.Dokkaebi.scooter;
 
 import com.example.Dokkaebi.scooter.dto.DriveLogDto;
+import com.example.Dokkaebi.scooter.dto.ScooterLocationRes;
 import com.example.Dokkaebi.scooter.dto.ScooterStateReqDto;
 import com.example.Dokkaebi.scooter.dto.ScooterStateResDto;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
@@ -21,13 +22,13 @@ public class ScooterController {
     private final ScooterService scooterService;
 
     @GetMapping("/scooter/state")
-    public ResponseEntity<Object> findScooters() {
+    public List<ScooterStateResDto> findScooters() {
         List<ScooterStateResDto> responseDtos = new ArrayList<>();
         List<ScooterState> scooterStates = scooterService.findAll();
         for (ScooterState scooterState : scooterStates) {
             responseDtos.add(new ScooterStateResDto(scooterState));
         }
-        return new ResponseEntity(new Result(responseDtos), HttpStatus.OK);
+        return responseDtos;
     }
 
     @PostMapping("/scooter/new")
@@ -39,6 +40,12 @@ public class ScooterController {
     public DriveLogDto checkDriveLog(@RequestParam String scooterId, @RequestParam int useCount) {
         return scooterService.checkDriveLog(scooterId, useCount);
     }
+
+    @GetMapping("/scooter/location")
+    public ScooterLocationRes checkScooter(@RequestHeader(value = "access_token") String accessToken) {
+        return scooterService.findScooterByMember(accessToken);
+    }
+
 
     @Data
     @AllArgsConstructor

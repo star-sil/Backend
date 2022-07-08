@@ -1,10 +1,18 @@
 package com.example.Dokkaebi.scooter;
 
+import com.example.Dokkaebi.exception.ApiException;
+import com.example.Dokkaebi.exception.ExceptionEnum;
+import com.example.Dokkaebi.member.Member;
+import com.example.Dokkaebi.member.MemberService;
+import com.example.Dokkaebi.rental.Rental;
+import com.example.Dokkaebi.rental.RentalService;
 import com.example.Dokkaebi.scooter.dto.DriveLogDto;
+import com.example.Dokkaebi.scooter.dto.ScooterLocationRes;
 import com.example.Dokkaebi.scooter.dto.ScooterStateReqDto;
 import com.example.Dokkaebi.scooter.entity.DriveLog;
 import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +27,9 @@ public class ScooterService {
     private final ScooterRepository scooterRepo;
     private final ScooterStateRepo scooterStateRepo;
     private final DriveLogRepo driveLogRepo;
+    private final TokenService tokenService;
+    private final MemberService memberService;
+    private final RentalService rentalService;
 
     public List<ScooterState> findAll() {
         return scooterStateRepo.findAll();
@@ -51,5 +62,13 @@ public class ScooterService {
 
     public List<Scooter> findScooterByIdentity(String identity){
         return scooterRepo.findBikeByIdentity(identity);
+    }
+
+    public ScooterLocationRes findScooterByMember(String accessToken) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        Member member = memberService.findMember(identity);
+        Rental rental = rentalService.findRental(member);
+        DriveLog driveLog = driveLogRepo.findLogByRental(rental).orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
+        return new ScooterLocationRes(driveLog.getScooters().get(0));
     }
 }
