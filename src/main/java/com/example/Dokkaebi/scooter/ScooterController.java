@@ -5,6 +5,7 @@ import com.example.Dokkaebi.scooter.dto.ScooterLocationRes;
 import com.example.Dokkaebi.scooter.dto.ScooterStateReqDto;
 import com.example.Dokkaebi.scooter.dto.ScooterStateResDto;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class ScooterController {
         return scooterService.checkDriveLog(scooterId, useCount);
     }
 
+    @ApiOperation(value = "로그인")
     @GetMapping("/scooter/location")
     public ScooterLocationRes checkScooter(@RequestHeader(value = "access_token") String accessToken) {
         return scooterService.findScooterByMember(accessToken);

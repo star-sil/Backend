@@ -1,5 +1,6 @@
 package com.example.Dokkaebi.rental;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,13 @@ public class RentalController {
         rentalService.startRental(accessToken, rentalRequestDto);
     }
 
+    @ApiOperation(value = "킥보드 렌탈기록")
     @GetMapping("/rental")
     public RentalHisResDto checkRental(@RequestHeader(value = "access_token") String accessToken) {
         return rentalService.findAllRentalByMember(accessToken);
     }
 
+    @ApiOperation(value = "킥보드 주행기록")
     @GetMapping("/rental/{id}")
     public RentalResDto checkRideHistory(@PathVariable Long id) {
         return rentalService.findRentalById(id);
