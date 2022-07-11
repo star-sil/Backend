@@ -42,7 +42,7 @@ public class ScooterController {
         return scooterService.checkDriveLog(scooterId, useCount);
     }
 
-    @ApiOperation(value = "로그인")
+    @ApiOperation(value = "스쿠터 위치확인")
     @GetMapping("/scooter/location")
     public ScooterLocationRes checkScooter(@RequestHeader(value = "access_token") String accessToken) {
         return scooterService.findScooterByMember(accessToken);
