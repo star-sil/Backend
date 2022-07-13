@@ -1,21 +1,14 @@
 package com.example.Dokkaebi.scooter;
 
-import com.example.Dokkaebi.scooter.dto.DriveLogDto;
-import com.example.Dokkaebi.scooter.dto.ScooterLocationRes;
-import com.example.Dokkaebi.scooter.dto.ScooterStateReqDto;
-import com.example.Dokkaebi.scooter.dto.ScooterStateResDto;
-import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.api.FlaskApi;
+import com.example.Dokkaebi.scooter.dto.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,6 +41,11 @@ public class ScooterController {
         return scooterService.findScooterByMember(accessToken);
     }
 
+    @ApiOperation(value = "대여한 스쿠터 상태확인")
+    @GetMapping("/scooter/state")
+    public ScooterRentalStateResDto checkState(@RequestHeader(value = "access_token") String accessToken) {
+        return scooterService.checkScooterState(accessToken);
+    }
 
     @Data
     @AllArgsConstructor
