@@ -1,6 +1,5 @@
 package com.example.Dokkaebi.scooter;
 
-import com.example.Dokkaebi.api.FlaskApi;
 import com.example.Dokkaebi.scooter.dto.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -14,16 +13,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ScooterController {
     private final ScooterService scooterService;
-
-    @GetMapping("/scooter/state")
-    public List<ScooterStateResDto> findScooters() {
-        List<ScooterStateResDto> responseDtos = new ArrayList<>();
-        List<ScooterState> scooterStates = scooterService.findAll();
-        for (ScooterState scooterState : scooterStates) {
-            responseDtos.add(new ScooterStateResDto(scooterState));
-        }
-        return responseDtos;
-    }
 
     @PostMapping("/scooter/new")
     public void enrollScooter(@RequestBody ScooterStateReqDto scooterStateReqDto) throws Exception{
