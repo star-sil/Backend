@@ -16,7 +16,7 @@ import java.util.List;
 public class DriveLog {
     @Id @GeneratedValue
     private Long id;
-    private int useCount;
+    private int useCount; //scooter_state와 겹침 제거 필요
     private LocalDateTime startTime;
     private String scooterIdentity;
 

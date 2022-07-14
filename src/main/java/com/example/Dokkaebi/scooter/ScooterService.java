@@ -6,17 +6,17 @@ import com.example.Dokkaebi.member.Member;
 import com.example.Dokkaebi.member.MemberService;
 import com.example.Dokkaebi.rental.Rental;
 import com.example.Dokkaebi.rental.RentalService;
-import com.example.Dokkaebi.scooter.dto.DriveLogDto;
-import com.example.Dokkaebi.scooter.dto.ScooterLocationRes;
-import com.example.Dokkaebi.scooter.dto.ScooterStateReqDto;
+import com.example.Dokkaebi.scooter.dto.*;
 import com.example.Dokkaebi.scooter.entity.DriveLog;
 import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.scooter.entity.Status;
 import com.example.Dokkaebi.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +68,20 @@ public class ScooterService {
         String identity = tokenService.getIdentityFromToken(accessToken);
         Member member = memberService.findMember(identity);
         Rental rental = rentalService.findRental(member);
-        DriveLog driveLog = driveLogRepo.findLogByRental(rental).orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
+        DriveLog driveLog = driveLogRepo.findLogByRental(rental).get(0);
         return new ScooterLocationRes(driveLog.getScooters().get(0));
+    }
+
+    public ScooterRentalStateResDto checkScooterState(String accessToken) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        Member member = memberService.findMember(identity);
+        Rental rental = rentalService.findRental(member);
+        if (rental.getEndDate().isBefore(LocalDate.now())) {
+            return new ScooterRentalStateResDto(Status.NONE, null, null);
+        } else if (rental.getScooterState().getStatus() == Status.DRIVE) {
+            return new ScooterRentalStateResDto(Status.DRIVE, rental.getStartDate(), rental.getEndDate());
+        } else {
+            return new ScooterRentalStateResDto(Status.RENTAL, rental.getStartDate(), rental.getEndDate());
+        }
     }
 }

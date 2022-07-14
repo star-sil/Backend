@@ -10,8 +10,6 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @NoArgsConstructor
 public class RentalRequestDto {
-    private String identity;
-    private String bikeNum;
     private LocalDate startDate;
     private LocalDate endDate;
     private Long price;
