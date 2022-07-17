@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ScooterController {
     private final ScooterService scooterService;
+    private final FlaskApi flaskApi;
 
     @PostMapping("/scooter/new")
     public void enrollScooter(@RequestBody ScooterStateReqDto scooterStateReqDto) throws Exception{
@@ -35,6 +36,12 @@ public class ScooterController {
     @GetMapping("/scooter/state")
     public ScooterRentalStateResDto checkState(@RequestHeader(value = "Authorization") String accessToken) {
         return scooterService.checkScooterState(accessToken);
+    }
+
+    @ApiOperation(value = "수쿠터 남은 주행 시간확인")
+    @GetMapping("/scooter/remainTime")
+    public ScooterRemainTimeDto checkRemainTime() throws Exception {
+        return flaskApi.requestRemainTime();
     }
 
     @Data
