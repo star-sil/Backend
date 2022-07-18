@@ -18,7 +18,7 @@ public class RentalRepository {
     }
 
     public Optional<Rental> findOneRentalByMember(Member member) {
-        return em.createQuery("select r from Rental r where r.member = :member", Rental.class)
+        return em.createQuery("select r from Rental r where r.member = :member order by r.id DESC", Rental.class)
                 .setParameter("member",member)
                 .getResultList().stream().findFirst();
     }
@@ -30,5 +30,9 @@ public class RentalRepository {
 
     public Rental findById(Long id) {
         return em.find(Rental.class, id);
+    }
+
+    public void remove(Rental rental) {
+        em.remove(rental);
     }
 }

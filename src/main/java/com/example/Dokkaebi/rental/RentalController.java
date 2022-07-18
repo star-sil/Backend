@@ -34,4 +34,10 @@ public class RentalController {
     public RentalResDto checkRideHistory(@PathVariable Long id) {
         return rentalService.findRentalById(id);
     }
+
+    @ApiOperation(value = "대여한 킥보드 반납")
+    @PostMapping("/rental/return")
+    public void returnScooter(@RequestHeader(value = "Authorization") String accessToken) {
+        rentalService.returnScooter(accessToken);
+    }
 }

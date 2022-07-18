@@ -24,6 +24,10 @@ public class ScooterStateRepo {
                 .getResultList();
     }
 
+    public ScooterState findOneById(Long id) {
+        return em.find(ScooterState.class,id);
+    }
+
     public void save(ScooterState scooterState) {
         em.persist(scooterState);
     }
