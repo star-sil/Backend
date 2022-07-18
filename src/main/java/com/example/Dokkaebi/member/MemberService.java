@@ -20,25 +20,15 @@ public class MemberService implements UserDetailsService {
 
     @Transactional
     public Long join(Member member) {
-        if (!validateDuplicateMember(member)) {
-            return -1L;
-        }
+        findMember(member.getIdentity());
         MemberRepo.save(member);
         return member.getId();
     }
 
     //새로운 객체 반환 시 문제가 발생할 수 있음.
     public Member findMember(String identity) {
-        return MemberRepo.findByIdentity(identity);
-    }
-
-    private boolean validateDuplicateMember(Member member) {
-        Member findMember = MemberRepo.findByIdentity(member.getIdentity());
-        if (findMember.getIdentity() == null) {
-            return true;
-        } else {
-            return false;
-        }
+        return MemberRepo.findByIdentity(identity)
+                .orElseThrow(()->new ApiException(ExceptionEnum.IdentityNotMatched));
     }
 
     public void updateMember(MemberRequestDto memberRequestDto){
