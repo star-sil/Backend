@@ -11,11 +11,13 @@ import com.example.Dokkaebi.scooter.entity.ScooterState;
 import com.example.Dokkaebi.scooter.entity.Status;
 import com.example.Dokkaebi.token.TokenService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -44,6 +46,7 @@ public class RentalService {
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NotExistAvailableScooter));
         scooterState.changeStatus(Status.RENTAL);
         rentalRepo.save(new Rental(member,rentalRequestDto,scooterState));
+        log.info("rental: " + member.getIdentity() + " " + scooterState.getIdentity() + " " + scooterState.getStatus());
     }
 
     public RentalHisResDto findAllRentalByMember(String accessToken) {
@@ -67,5 +70,15 @@ public class RentalService {
             rentalResDto.addRideHistory(driveLog);
         }
         return rentalResDto;
+    }
+
+    @Transactional
+    public void returnScooter(String accessToken) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        Member member = memberService.findMember(identity);
+        Rental rental = rentalRepo.findOneRentalByMember(member)
+                .orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
+        ScooterState scooterState = scooterStateRepo.findOneById(rental.getScooterState().getId());
+        scooterState.changeStatus(Status.NONE);
     }
 }

@@ -9,7 +9,7 @@ public enum ExceptionEnum {
     IdentityNotMatched(HttpStatus.UNAUTHORIZED,103,"존재하지 않는 아이디입니다."),
     TokenMalformed(HttpStatus.UNAUTHORIZED,104,"지원하지 않는 형태의 토큰이 입력되었습니다."),
     NeedSignInAgain(HttpStatus.UNAUTHORIZED,102,"재 로그인이 필요합니다."),
-    RentalNotMatched(HttpStatus.BAD_REQUEST,101,"대여중이 아닙니다."),
+    RentalNotMatched(HttpStatus.BAD_REQUEST,101,"대여한 기록이 없습니다."),
     DriveLogNotMatched(HttpStatus.BAD_REQUEST,105,"해당하는 주행기록이 없습니다"),
     NotExistAvailableScooter(HttpStatus.BAD_REQUEST, 106, "대여가능한 스쿠터가 존재하지 않습니다."),
 
