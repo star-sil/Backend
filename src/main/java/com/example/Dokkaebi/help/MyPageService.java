@@ -3,7 +3,6 @@ package com.example.Dokkaebi.help;
 import com.example.Dokkaebi.member.JpaMemberRepo;
 import com.example.Dokkaebi.rental.JpaRentalRepo;
 import com.example.Dokkaebi.member.MemberRepository;
-import com.example.Dokkaebi.rental.JpaRentalRepoSupport;
 import com.example.Dokkaebi.help.dto.MyPageResponse;
 import com.example.Dokkaebi.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ impl 클래스를 여러가지 만들어 interface 를 사용한다. (예, 로�
 */
 public class MyPageService {
     private final JpaRentalRepo jpaRentalRepo;
-    private final JpaRentalRepoSupport jpaRentalRepoSupport;
     private final JpaMemberRepo jpaMemberRepo;
     //일반 EntityManager 호출
     private final MemberRepository memberRepository;
