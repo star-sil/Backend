@@ -30,15 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-configuration-processor'
 	runtimeOnly 'mysql:mysql-connector-java'
 
-
-	implementation 'com.querydsl:querydsl-jpa'
-	implementation 'com.querydsl:querydsl-core'
-	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
-	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-	// Q클래스 생성을 위해.. https://gaemi606.tistory.com/entry/Spring-Boot-Querydsl-%EC%B6%94%EA%B0%80-Gradle-7x
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-
 	implementation 'org.projectlombok:lombok:1.18.20'
 	implementation 'junit:junit:4.13.1'
 	compileOnly 'org.projectlombok:lombok'
@@ -59,12 +51,6 @@ test {
 	useJUnitPlatform()
 }
 
-def querydslSrcDir = "$buildDir/generated/querydsl"
-
-
-sourceSets {
-    main.java.srcDirs querydslSrcDir
-}
 
 configurations {
 	querydsl.extendsFrom compileClasspath
