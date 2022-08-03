@@ -1,5 +1,7 @@
 package com.example.Dokkaebi.help.Qna;
 
+import com.example.Dokkaebi.exception.ApiException;
+import com.example.Dokkaebi.exception.ExceptionEnum;
 import com.example.Dokkaebi.help.dto.QnaHisDto;
 import com.example.Dokkaebi.help.dto.QnaReqDto;
 import com.example.Dokkaebi.help.dto.QnaResDto;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,10 +47,20 @@ public class QnaService {
     }
 
     @Transactional
-    public void reply(QnaReqDto qnaReqDto) throws Exception {
+    public void reply(QnaReqDto qnaReqDto, Long qnaId) {
+        Qna qna = jpaQnaRepo.findById(qnaId)
+                .orElseThrow(()->new ApiException(ExceptionEnum.InvalidQnaId));
+        Content content = new Content(qnaReqDto.getComment(), WriterStatus.ADMIN, qna);
+        jpaContentRepo.save(content);
+        qna.AdminResponded();
     }
-    //클릭하면 확인완료 띄우기
-    @Transactional
-    public void confirm(QnaReqDto qnaReqDto) throws Exception {
+
+    public QnaHisDto checkQna(QnaStatus status) {
+        QnaHisDto qnaHisDto = new QnaHisDto();
+        List<Qna> qnaList = jpaQnaRepo.findByStatus(status);
+        for (Qna qna : qnaList) {
+            qnaHisDto.addQnaResDto(new QnaResDto(qna));
+        }
+        return qnaHisDto;
     }
 }

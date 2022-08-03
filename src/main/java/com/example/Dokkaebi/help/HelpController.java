@@ -2,6 +2,7 @@ package com.example.Dokkaebi.help;
 
 import com.example.Dokkaebi.help.Qna.Qna;
 import com.example.Dokkaebi.help.Qna.QnaService;
+import com.example.Dokkaebi.help.Qna.QnaStatus;
 import com.example.Dokkaebi.help.dto.QnaHisDto;
 import com.example.Dokkaebi.help.dto.QnaReqDto;
 import com.example.Dokkaebi.member.Member;
@@ -45,18 +46,19 @@ public class HelpController {
     }
 
     @PostMapping("/help/qna/{qnaId}")
-    @ApiOperation(value = "문의사항 답변하기", notes = "주어진 admin id와 comment로 답변을 작성합니다.")
-    public ResponseEntity<Long> replyQna(@RequestBody QnaReqDto qnaReqDto, String qnaId) throws Exception {
-        qnaService.reply(qnaReqDto);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ApiOperation(value = "문의사항 답변하기")
+    public ResponseEntity<Long> replyQna(@RequestBody QnaReqDto qnaReqDto, @PathVariable Long qnaId) {
+        qnaService.reply(qnaReqDto,qnaId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PutMapping("/help/qna")
+    @GetMapping("/help/qna/admin")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation(value = "관리자 문의사항 조회 시", notes = "관리자가 문의사항 조회 시 호출")
-    public ResponseEntity confirmQna(@RequestBody QnaReqDto qnaReqDto) throws Exception {
-        qnaService.confirm(qnaReqDto);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<QnaHisDto> checkQna(@RequestParam(name = "status")QnaStatus status) {
+        QnaHisDto qnaHisDto = qnaService.checkQna(status);
+        return ResponseEntity.ok(qnaHisDto);
     }
     @Data
     @AllArgsConstructor
