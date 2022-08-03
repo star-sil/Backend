@@ -51,4 +51,15 @@ public class MemberService implements UserDetailsService {
     public UserDetails loadUserByUsername(String identity) throws UsernameNotFoundException {
         return jpaMemberRepo.findByIdentity(identity);
     }
+
+    @Transactional
+    public void changePassword(String identity, String EncodePassword) {
+        Member member = jpaMemberRepo.findByIdentity(identity);
+        member.changePassword(EncodePassword);
+    }
+
+    public MemberStatDto checkMemberStat(String identity) {
+        Member member = jpaMemberRepo.findByIdentity(identity);
+        return new MemberStatDto(member);
+    }
 }

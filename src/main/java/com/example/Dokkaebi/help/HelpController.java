@@ -28,7 +28,7 @@ public class HelpController {
 
     @GetMapping("/help/qna")
     @ApiOperation(value = "문의사항 전체 조회", notes = "모든 문의사항을 조회함. 시간 순서 추가 필요")
-    public ResponseEntity<QnaHisDto> findQnaById(@RequestHeader(name = "access_token") String accessToken) {
+    public ResponseEntity<QnaHisDto> findQnaById(@RequestHeader(name = "Authorization") String accessToken) {
         String identity = tokenService.getIdentityFromToken(accessToken);
         Member member = memberService.findMember(identity);
         return ResponseEntity.ok(qnaService.getListOfQna(member));
@@ -37,7 +37,7 @@ public class HelpController {
     @ApiOperation(value = "문의사항 등록", notes = "주어진 title와 comment 새로운 문의사항을 등록합니다.")
     public ResponseEntity<Long> registerQna(
             @RequestBody QnaReqDto qnaReqDto,
-            @RequestHeader(value = "access_token") String accessToken){
+            @RequestHeader(value = "Authorization") String accessToken){
         String identity = tokenService.getIdentityFromToken(accessToken);
         Member questioner = memberService.findMember(identity);
         Qna qna = qnaService.register(qnaReqDto,questioner);

@@ -2,7 +2,6 @@ package com.example.Dokkaebi.member;
 
 import com.example.Dokkaebi.exception.ApiException;
 import com.example.Dokkaebi.exception.ExceptionEnum;
-import com.example.Dokkaebi.token.TokenRequestDto;
 import com.example.Dokkaebi.token.TokenResponseDto;
 import com.example.Dokkaebi.help.dto.MyPageResponse;
 import com.example.Dokkaebi.token.Token;
@@ -17,13 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MemberController {
     @Value("${key.token}")
@@ -46,8 +42,7 @@ public class MemberController {
         tokenService.Join(token);
 
         //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
-        return new ResponseEntity(memberId, HttpStatus.OK);
-
+        return ResponseEntity.ok(memberId);
     }
     @ApiOperation(value = "로그인", notes = "성공하면 access, refresh 토큰 반환")
     @PostMapping("/member/login")
@@ -79,9 +74,8 @@ public class MemberController {
     }
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
-    @ResponseBody
     public ResponseEntity<Object> reissueToken(
-            @RequestHeader(value = "access_token") String accessToken,
+            @RequestHeader(value = "Authorization") String accessToken,
             @RequestHeader(value = "refresh_token") String refreshToken,
             @RequestBody String identity) {
 
@@ -93,16 +87,32 @@ public class MemberController {
         return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "비밀번호 변경")
+    @PostMapping("/member")
+    public void changePassword(
+            @RequestHeader(value = "Authorization") String accessToken,
+            @RequestBody ChangePasswordDto changePasswordDto) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        String EncodePassword = passwordEncoder.encode(changePasswordDto.getAfterPassword());
+        memberservice.changePassword(identity,EncodePassword);
+    }
+
     //권한 주기기능은 https://llshl.tistory.com/28?category=942328 참고
     @PostMapping("/member/loginTest")
-    @ResponseBody
-    public String CheckToken(@RequestHeader(value = "access_token") String accessToken) {
+    public String CheckToken(@RequestHeader(value = "Authorization") String accessToken) {
         return "asdf";
 
     }
 
+    @ApiOperation(value = "내 정보 확인하기")
+    @GetMapping("/member")
+    public MemberStatDto checkMemberStat(@RequestHeader(value = "Authorization") String accessToken) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        return memberservice.checkMemberStat(identity);
+    }
+
+
     @PutMapping("/member")
-    @ResponseBody
     public String modifyInfo(
             //@RequestHeader(value = "access_token")String accessToken,
             //추후 토큰 인증을 통해 정보 변경 권한 확인하기
@@ -113,7 +123,6 @@ public class MemberController {
     //삭제는 염두해 두지 않음. 탈퇴의 결과는 조금 더 생각해 봐야 할 듯.
 
     @GetMapping("/mypage/{identity}")
-    @ResponseBody
     @ApiOperation(value="마이페이지 조회", notes = "주어진 id로 마이페이지 조회")
     public ResponseEntity<MyPageResponse> viewMyPage(@PathVariable(name = "identity") String identity){
         MyPageResponse myPageResponse = myPageService.viewMyPage(identity);
