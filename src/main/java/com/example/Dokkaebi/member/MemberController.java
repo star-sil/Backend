@@ -42,8 +42,7 @@ public class MemberController {
         tokenService.Join(token);
 
         //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
-        return new ResponseEntity(memberId, HttpStatus.OK);
-
+        return ResponseEntity.ok(memberId);
     }
     @ApiOperation(value = "로그인", notes = "성공하면 access, refresh 토큰 반환")
     @PostMapping("/member/login")
@@ -76,7 +75,7 @@ public class MemberController {
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
     public ResponseEntity<Object> reissueToken(
-            @RequestHeader(value = "access_token") String accessToken,
+            @RequestHeader(value = "Authorization") String accessToken,
             @RequestHeader(value = "refresh_token") String refreshToken,
             @RequestBody String identity) {
 
@@ -91,7 +90,7 @@ public class MemberController {
     @ApiOperation(value = "비밀번호 변경")
     @PostMapping("/member")
     public void changePassword(
-            @RequestHeader(value = "access_token") String accessToken,
+            @RequestHeader(value = "Authorization") String accessToken,
             @RequestBody ChangePasswordDto changePasswordDto) {
         String identity = tokenService.getIdentityFromToken(accessToken);
         String EncodePassword = passwordEncoder.encode(changePasswordDto.getAfterPassword());
@@ -100,14 +99,14 @@ public class MemberController {
 
     //권한 주기기능은 https://llshl.tistory.com/28?category=942328 참고
     @PostMapping("/member/loginTest")
-    public String CheckToken(@RequestHeader(value = "access_token") String accessToken) {
+    public String CheckToken(@RequestHeader(value = "Authorization") String accessToken) {
         return "asdf";
 
     }
 
     @ApiOperation(value = "내 정보 확인하기")
     @GetMapping("/member")
-    public MemberStatDto checkMemberStat(@RequestHeader(value = "access_token") String accessToken) {
+    public MemberStatDto checkMemberStat(@RequestHeader(value = "Authorization") String accessToken) {
         String identity = tokenService.getIdentityFromToken(accessToken);
         return memberservice.checkMemberStat(identity);
     }
