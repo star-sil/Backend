@@ -20,8 +20,11 @@ public class MemberService implements UserDetailsService {
 
     @Transactional
     public Long join(Member member) {
-        findMember(member.getIdentity());
-        MemberRepo.save(member);
+        if(MemberRepo.findByIdentity(member.getIdentity()).isEmpty()){
+            MemberRepo.save(member);
+        } else {
+            throw new ApiException(ExceptionEnum.IdentityDuplicated);
+        }
         return member.getId();
     }
 

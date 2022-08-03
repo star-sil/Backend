@@ -37,20 +37,17 @@ public class MemberController {
 
     @ApiOperation(value = "회원 가입", notes = "성공하면 memberId 반환")
     @PostMapping("/member/new")
-    public ResponseEntity<Object> createMember(@RequestBody MemberRequestDto memberRequestDto) {
+    public ResponseEntity<Long> createMember(@RequestBody MemberRequestDto memberRequestDto) {
         // dto 레벨에서 encoder 를 쓰지는 않으니까..
         memberRequestDto.encodePassword(passwordEncoder.encode(memberRequestDto.getPassword()));
         Member member = memberRequestDto.toEntity();
         Long memberId = memberservice.join(member);
-        if (memberId == -1L) {
-            return new ResponseEntity("duplicate identity", HttpStatus.BAD_REQUEST);
-        }else{
-            Token token = Token.builder().member(member).build();
-            tokenService.Join(token);
+        Token token = Token.builder().member(member).build();
+        tokenService.Join(token);
 
-            //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
-            return new ResponseEntity(memberId, HttpStatus.OK);
-        }
+        //객체면 application/json, 문자열이면 text content-type으로 보냄 대신ResponseEntity<Object> object 사용해야함!!
+        return new ResponseEntity(memberId, HttpStatus.OK);
+
     }
     @ApiOperation(value = "로그인", notes = "성공하면 access, refresh 토큰 반환")
     @PostMapping("/member/login")

@@ -12,6 +12,7 @@ public enum ExceptionEnum {
     RentalNotMatched(HttpStatus.BAD_REQUEST,101,"대여한 기록이 없습니다."),
     DriveLogNotMatched(HttpStatus.BAD_REQUEST,105,"해당하는 주행기록이 없습니다"),
     NotExistAvailableScooter(HttpStatus.BAD_REQUEST, 106, "대여가능한 스쿠터가 존재하지 않습니다."),
+    IdentityDuplicated(HttpStatus.UNAUTHORIZED, 107, "이미 존재하는 아이디 입니다."),
 
     InvalidQnaId(HttpStatus.UNPROCESSABLE_ENTITY,201,"qnd id에 맞는 문의사항이 존재하지 않습니다."),
     SecurityTokenException(HttpStatus.UNAUTHORIZED,301,"auth 단계의 인증 실패"),
