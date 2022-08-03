@@ -2,7 +2,6 @@ package com.example.Dokkaebi.member;
 
 import com.example.Dokkaebi.exception.ApiException;
 import com.example.Dokkaebi.exception.ExceptionEnum;
-import com.example.Dokkaebi.token.TokenRequestDto;
 import com.example.Dokkaebi.token.TokenResponseDto;
 import com.example.Dokkaebi.help.dto.MyPageResponse;
 import com.example.Dokkaebi.token.Token;
@@ -17,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -108,6 +104,14 @@ public class MemberController {
         return "asdf";
 
     }
+
+    @ApiOperation(value = "내 정보 확인하기")
+    @GetMapping("/member")
+    public MemberStatDto checkMemberStat(@RequestHeader(value = "access_token") String accessToken) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        return memberservice.checkMemberStat(identity);
+    }
+
 
     @PutMapping("/member")
     public String modifyInfo(

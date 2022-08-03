@@ -57,4 +57,9 @@ public class MemberService implements UserDetailsService {
         Member member = jpaMemberRepo.findByIdentity(identity);
         member.changePassword(EncodePassword);
     }
+
+    public MemberStatDto checkMemberStat(String identity) {
+        Member member = jpaMemberRepo.findByIdentity(identity);
+        return new MemberStatDto(member);
+    }
 }
