@@ -84,7 +84,7 @@ public class TokenService {
         }catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e){
             throw new ApiException(ExceptionEnum.TokenMalformed);
         }catch (ExpiredJwtException e){
-            throw e;
+            throw new ApiException(ExceptionEnum.SecurityInvalidToken);
         }
     }
     //?? 위랑 밑 합치기.. 나중에
