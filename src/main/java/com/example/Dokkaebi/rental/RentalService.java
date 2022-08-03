@@ -97,4 +97,10 @@ public class RentalService {
         }
         return rentalStatResDtos;
     }
+
+    @Transactional
+    public void processRentalReq(Long rentalId) {
+        Rental rental = rentalRepo.findById(rentalId);
+        rental.getScooterState().changeStatus(Status.RENTAL);
+    }
 }

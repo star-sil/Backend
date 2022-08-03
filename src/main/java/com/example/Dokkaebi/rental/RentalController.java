@@ -53,10 +53,17 @@ public class RentalController {
         rentalService.returnScooter(accessToken);
     }
 
-    @ApiOperation(value = "렌탈 요청 정보보기")
+    @ApiOperation(value = "대여 요청 정보보기")
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("rental/admin")
     public ResponseEntity<List<RentalStatResDto>> checkRentalReq(@RequestParam(value = "status") Status status) {
         return ResponseEntity.ok(rentalService.findAllRentalByStatus(status));
+    }
+
+    @ApiOperation(value = "대여 요청 처리")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("rental/{rentalId}")
+    public void processRentalReq(@RequestParam(value = "rentalId") Long rentalId) {
+        rentalService.processRentalReq(rentalId);
     }
 }
