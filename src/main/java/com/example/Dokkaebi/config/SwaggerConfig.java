@@ -2,7 +2,6 @@ package com.example.Dokkaebi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -32,7 +31,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         Parameter accessTokenBuilder = new ParameterBuilder()
-                .name("access_token")
+                .name("Authorization")
                 .description("access_token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
@@ -59,7 +58,7 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.Dokkaebi"))
-                .paths(PathSelectors.any())
+                .paths(PathSelectors.regex("/\\b(?!exception).+?\\b"))
                 .build();
     }
 
