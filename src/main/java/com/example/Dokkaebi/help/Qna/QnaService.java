@@ -20,16 +20,15 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QnaService {
-    private final QnaRepository qnaRepo;
-    private final MemberRepository memberRepository;
     private final JpaQnaRepo jpaQnaRepo;
     private final JpaMemberRepo jpaMemberRepo;
     private final JpaQnaRegiRepo jpaQnaRegiRepo;
+    private final JpaContentRepo jpaContentRepo;
     public List<QnaResDto> getListOfQna(String questionerId){
         List<QnaResDto> responseDtos = new ArrayList<>();
         if(questionerId==null){
             //아이디가 없다면 전체 조회
-            List<Qna> qnaList = qnaRepo.findAll();
+            List<Qna> qnaList = jpaQnaRepo.findAll();
             for (Qna qna : qnaList) {
                 responseDtos.add(new QnaResDto(qna));
             }
@@ -48,32 +47,19 @@ public class QnaService {
         } return responseDtos;
     }
     @Transactional
-    public Qna register(QnaReqDto qnaReqDto){
-        qnaReqDto.setRegiDate(LocalDateTime.now());
-        Member questioner = jpaMemberRepo.findByIdentity(qnaReqDto.getQuestionerId());
-        if(questioner==null){
-            throw new ApiException(ExceptionEnum.IdentityNotMatched);
-        }else{
-            Qna qna = qnaReqDto.toEntity(questioner);
-            qnaRepo.save(qna);
-            return qna;
-        }
+    public Qna register(QnaReqDto qnaReqDto, Member questioner){
+        Qna qna = new Qna(qnaReqDto.getTitle(), questioner);
+        jpaQnaRepo.save(qna);
+        Content content = new Content(qnaReqDto.getComment(),WriterStatus.USER,qna);
+        jpaContentRepo.save(content);
+        return qna;
     }
 
     @Transactional
     public void reply(QnaReqDto qnaReqDto) throws Exception {
-        Qna qna = qnaRepo.findByQnaId(qnaReqDto.getQnaId());
-        Member admin = jpaMemberRepo.findByIdentity(qnaReqDto.getAdminId());
-        QnaRegi qnaRegi = new QnaRegi(admin,qna,LocalDateTime.now(),qnaReqDto.getComment());
-        jpaQnaRegiRepo.save(qnaRegi);
-        qna.AdminResponded();
-        qnaRepo.save(qna);
     }
     //클릭하면 확인완료 띄우기
     @Transactional
     public void confirm(QnaReqDto qnaReqDto) throws Exception {
-        Qna qna = qnaRepo.findByQnaId(qnaReqDto.getQnaId());
-        qna.AdminConfirm();
-        qnaRepo.save(qna);
     }
 }

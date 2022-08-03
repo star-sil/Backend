@@ -31,10 +31,8 @@ public class QnaResDto {
         this.qnaId=qna.getId();
         this.questionerId=qna.getQuestioner().getIdentity();
         this.regiDate=qna.getRegiDate();
-        this.content=qna.getContent();
         this.adminId=qnaRegi.getAdmin().getIdentity();
         this.comment=qnaRegi.getComment();
-        this.content=qna.getContent();
         this.status=qna.getStatus();
         this.replyDate=qnaRegi.getReplyDate();
         this.title=qna.getTitle();
@@ -45,7 +43,6 @@ public class QnaResDto {
         this.qnaId=qna.getId();
         this.questionerId=qna.getQuestioner().getIdentity();
         this.regiDate=qna.getRegiDate();
-        this.content=qna.getContent();
         this.status=qna.getStatus();
         this.title=qna.getTitle();
     }
