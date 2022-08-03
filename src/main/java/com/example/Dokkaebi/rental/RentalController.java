@@ -2,6 +2,9 @@ package com.example.Dokkaebi.rental;
 
 import com.example.Dokkaebi.member.Member;
 import com.example.Dokkaebi.member.MemberService;
+import com.example.Dokkaebi.rental.dto.RentalHisResDto;
+import com.example.Dokkaebi.rental.dto.RentalRequestDto;
+import com.example.Dokkaebi.rental.dto.RentalResDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.example.Dokkaebi.rental;
+package com.example.Dokkaebi.rental.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

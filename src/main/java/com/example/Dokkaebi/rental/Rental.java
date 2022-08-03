@@ -1,5 +1,6 @@
 package com.example.Dokkaebi.rental;
 
+import com.example.Dokkaebi.rental.dto.RentalRequestDto;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
 import com.example.Dokkaebi.member.Member;
 import lombok.Builder;

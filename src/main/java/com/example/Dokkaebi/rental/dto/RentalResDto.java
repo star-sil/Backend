@@ -1,4 +1,4 @@
-package com.example.Dokkaebi.rental;
+package com.example.Dokkaebi.rental.dto;
 
 import com.example.Dokkaebi.scooter.entity.DriveLog;
 import com.example.Dokkaebi.scooter.entity.Scooter;
@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

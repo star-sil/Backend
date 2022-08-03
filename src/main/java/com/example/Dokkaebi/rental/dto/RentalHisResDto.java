@@ -1,5 +1,6 @@
-package com.example.Dokkaebi.rental;
+package com.example.Dokkaebi.rental.dto;
 
+import com.example.Dokkaebi.rental.Rental;
 import com.example.Dokkaebi.scooter.entity.DriveLog;
 import lombok.Data;
 import lombok.Getter;
