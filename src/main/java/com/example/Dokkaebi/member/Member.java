@@ -61,6 +61,10 @@ public class Member implements UserDetails {
         this.auth = auth;
     }
 
+    public void changePassword(String EncodePassword) {
+        this.password = EncodePassword;
+    }
+
     @Override
     // 원래 해당 레벨에서 여러개의 인증 권한을 가질 수 있는 경우를 위해 collection 을 사용
     // 우선 그런 경우를 상정하지 않고 TokenService 에서 직접 해당 객체를 만들어 사용하는 것으로 대체

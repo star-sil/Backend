@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MemberController {
     @Value("${key.token}")
@@ -79,7 +79,6 @@ public class MemberController {
     }
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
-    @ResponseBody
     public ResponseEntity<Object> reissueToken(
             @RequestHeader(value = "access_token") String accessToken,
             @RequestHeader(value = "refresh_token") String refreshToken,
@@ -93,16 +92,24 @@ public class MemberController {
         return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "비밀번호 변경")
+    @PostMapping("/member")
+    public void changePassword(
+            @RequestHeader(value = "access_token") String accessToken,
+            @RequestBody ChangePasswordDto changePasswordDto) {
+        String identity = tokenService.getIdentityFromToken(accessToken);
+        String EncodePassword = passwordEncoder.encode(changePasswordDto.getAfterPassword());
+        memberservice.changePassword(identity,EncodePassword);
+    }
+
     //권한 주기기능은 https://llshl.tistory.com/28?category=942328 참고
     @PostMapping("/member/loginTest")
-    @ResponseBody
     public String CheckToken(@RequestHeader(value = "access_token") String accessToken) {
         return "asdf";
 
     }
 
     @PutMapping("/member")
-    @ResponseBody
     public String modifyInfo(
             //@RequestHeader(value = "access_token")String accessToken,
             //추후 토큰 인증을 통해 정보 변경 권한 확인하기
@@ -113,7 +120,6 @@ public class MemberController {
     //삭제는 염두해 두지 않음. 탈퇴의 결과는 조금 더 생각해 봐야 할 듯.
 
     @GetMapping("/mypage/{identity}")
-    @ResponseBody
     @ApiOperation(value="마이페이지 조회", notes = "주어진 id로 마이페이지 조회")
     public ResponseEntity<MyPageResponse> viewMyPage(@PathVariable(name = "identity") String identity){
         MyPageResponse myPageResponse = myPageService.viewMyPage(identity);
