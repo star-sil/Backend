@@ -46,9 +46,10 @@ public class HelpController {
     }
 
     @PostMapping("/help/qna/{qnaId}")
-    @ApiOperation(value = "문의사항 답변하기", notes = "주어진 admin id와 comment로 답변을 작성합니다.")
-    public ResponseEntity<Long> replyQna(@RequestBody QnaReqDto qnaReqDto, String qnaId) throws Exception {
-        qnaService.reply(qnaReqDto);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ApiOperation(value = "문의사항 답변하기")
+    public ResponseEntity<Long> replyQna(@RequestBody QnaReqDto qnaReqDto, @PathVariable Long qnaId) {
+        qnaService.reply(qnaReqDto,qnaId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
