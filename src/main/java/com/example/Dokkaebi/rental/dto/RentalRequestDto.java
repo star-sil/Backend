@@ -12,7 +12,9 @@ import java.time.temporal.ChronoUnit;
 public class RentalRequestDto {
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalDate date;
     private Long price;
+    private String address;
 
     public long calculatePrice(){
         this.price = ChronoUnit.DAYS.between(this.startDate,this.endDate) * 5000L;

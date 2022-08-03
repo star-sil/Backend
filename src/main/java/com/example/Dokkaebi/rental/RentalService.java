@@ -19,7 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -82,5 +84,17 @@ public class RentalService {
                 .orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
         ScooterState scooterState = scooterStateRepo.findOneById(rental.getScooterState().getId());
         scooterState.changeStatus(Status.NONE);
+    }
+
+    public List<RentalStatResDto> findAllRentalByStatus(Status status) {
+        List<RentalStatResDto> rentalStatResDtos = new ArrayList<>();
+        List<ScooterState> scooterStates = scooterStateRepo.findScootersByStatus(status);
+        for (ScooterState scooterState : scooterStates) {
+            Optional<Rental> rental = scooterState.getRentals().stream().findFirst();
+            if (rental.isPresent()) {
+                rentalStatResDtos.add(new RentalStatResDto(rental.get()));
+            }
+        }
+        return rentalStatResDtos;
     }
 }

@@ -20,7 +20,9 @@ public class Rental {
     private Member member;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalDate date;
     private Long price;
+    private String address;
     @ManyToOne @JoinColumn(name = "scooter_state_id")
     private ScooterState scooterState;
 
@@ -29,7 +31,9 @@ public class Rental {
         this.member = member;
         this.startDate = rentalRequestDto.getStartDate();
         this.endDate = rentalRequestDto.getEndDate();
+        this.date = rentalRequestDto.getDate();
         this.price = rentalRequestDto.getPrice();
+        this.address = rentalRequestDto.getAddress();
         this.scooterState = scooterState;
     }
 }

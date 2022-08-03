@@ -33,7 +33,7 @@ public class ScooterStateRepo {
     }
 
     public List<ScooterState> findScootersByStatus(Status status) {
-        return em.createQuery("select s from ScooterState s where s.status = :status")
+        return em.createQuery("select s from ScooterState s where s.status = :status order by s.id DESC")
                 .setParameter("status",status)
                 .getResultList();
     }
