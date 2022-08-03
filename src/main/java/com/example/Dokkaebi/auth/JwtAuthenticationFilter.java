@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         // 리퀘스트를 서블렛 리퀘스트로 변환하여 헤더에서 해당 이름 값 가져오기
-        String accessToken = ((HttpServletRequest) request).getHeader("access_token");
+        String accessToken = ((HttpServletRequest) request).getHeader("Authorization");
         if(accessToken!=null&&tokenService.accessTokenCheck(accessToken)){
             // accessToken 유효할 시 getAuthentication 으로 인증 정보 조회 및 토큰 생성
             Authentication auth = tokenService.getAuthentication(accessToken);
