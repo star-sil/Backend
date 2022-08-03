@@ -39,12 +39,10 @@ public class RentalService {
     }
 
     @Transactional
-    public void startRental(String accessToken, RentalRequestDto rentalRequestDto) {
-        String identity = tokenService.getIdentityFromToken(accessToken);
-        Member member = memberService.findMember(identity);
+    public void startRental(Member member, RentalRequestDto rentalRequestDto) {
         ScooterState scooterState = scooterStateRepo.findScootersByStatus(Status.NONE).stream().findFirst()
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NotExistAvailableScooter));
-        scooterState.changeStatus(Status.RENTAL);
+        scooterState.changeStatus(Status.WAIT);
         rentalRepo.save(new Rental(member,rentalRequestDto,scooterState));
         log.info("rental: " + member.getIdentity() + " " + scooterState.getIdentity() + " " + scooterState.getStatus());
     }

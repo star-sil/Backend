@@ -1,5 +1,7 @@
 package com.example.Dokkaebi.rental;
 
+import com.example.Dokkaebi.member.Member;
+import com.example.Dokkaebi.member.MemberService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 public class RentalController {
     private final RentalService rentalService;
+    private final MemberService memberService;
 
     @PostMapping("/rental/price")
     public long rentalPrice(@RequestBody RentalRequestDto rentalRequestDto) {
@@ -20,7 +23,8 @@ public class RentalController {
 
     @PostMapping("/rental/new")
     public void startRental(@RequestHeader(value = "Authorization") @NotNull String accessToken, @RequestBody RentalRequestDto rentalRequestDto) {
-        rentalService.startRental(accessToken, rentalRequestDto);
+        Member member = memberService.findMember(accessToken);
+        rentalService.startRental(member, rentalRequestDto);
     }
 
     @ApiOperation(value = "킥보드 렌탈기록")
