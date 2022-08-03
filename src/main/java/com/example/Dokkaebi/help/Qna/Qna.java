@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -19,6 +21,8 @@ public class Qna {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member questioner;
+    @OneToMany(mappedBy = "qna")
+    private List<Content> contents = new ArrayList<>();
     private String title;
     @Enumerated(EnumType.STRING)
     private QnaStatus status;
@@ -36,6 +40,9 @@ public class Qna {
     }
     public void AdminResponded(){
         this.status= QnaStatus.RESPONDED;
+    }
+    public void registerContent(Content content) {
+        this.contents.add(content);
     }
 
 }
