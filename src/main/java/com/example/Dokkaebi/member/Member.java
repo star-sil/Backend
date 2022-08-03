@@ -27,8 +27,7 @@ public class Member implements UserDetails {
     private String email;
     private String birth;
 
-    @OneToOne
-    @JoinColumn(name="token_id")
+    @OneToOne(mappedBy = "member")
     private Token token;
     @Enumerated(EnumType.STRING)
     private Gender gender;
