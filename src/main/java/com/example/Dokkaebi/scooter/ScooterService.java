@@ -1,6 +1,8 @@
 package com.example.Dokkaebi.scooter;
 
 
+import com.example.Dokkaebi.exception.ApiException;
+import com.example.Dokkaebi.exception.ExceptionEnum;
 import com.example.Dokkaebi.member.Member;
 import com.example.Dokkaebi.member.MemberService;
 import com.example.Dokkaebi.rental.Rental;
@@ -10,13 +12,11 @@ import com.example.Dokkaebi.scooter.dto.*;
 import com.example.Dokkaebi.scooter.entity.DriveLog;
 import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
-import com.example.Dokkaebi.scooter.entity.Status;
 import com.example.Dokkaebi.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,18 +76,8 @@ public class ScooterService {
     public ScooterRentalStateResDto checkScooterState(String accessToken) {
         String identity = tokenService.getIdentityFromToken(accessToken);
         Member member = memberService.findMember(identity);
-        List<Rental> rentals = rentalRepo.findAllRentalByMember(member);
-        if (rentals.isEmpty()) {
-            return new ScooterRentalStateResDto(Status.NONE, null, null);
-        } else{
-            Rental rental = rentals.get(0);
-            if (rental.getEndDate().isBefore(LocalDate.now())) {
-                return new ScooterRentalStateResDto(Status.NONE, null, null);
-            } else if (rentals.get(0).getScooterState().getStatus() == Status.DRIVE) {
-                return new ScooterRentalStateResDto(Status.DRIVE, rental.getStartDate(), rental.getEndDate());
-            } else {
-                return new ScooterRentalStateResDto(Status.RENTAL, rental.getStartDate(), rental.getEndDate());
-            }
-        }
+        Rental rental = rentalRepo.findAllRentalByMember(member).stream().findFirst()
+                 .orElseThrow(() -> new ApiException(ExceptionEnum.RentalNotMatched));
+        return new ScooterRentalStateResDto(rental);
     }
 }
