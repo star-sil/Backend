@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface JpaQnaRepo extends JpaRepository<Qna, Long> {
     List<Qna> findByQuestioner(Member questioner);
+    List<Qna> findByStatus(QnaStatus status);
 }

@@ -46,8 +46,14 @@ public class QnaService {
     @Transactional
     public void reply(QnaReqDto qnaReqDto) throws Exception {
     }
+
     //클릭하면 확인완료 띄우기
-    @Transactional
-    public void confirm(QnaReqDto qnaReqDto) throws Exception {
+    public QnaHisDto checkQna(QnaStatus status) {
+        QnaHisDto qnaHisDto = new QnaHisDto();
+        List<Qna> qnaList = jpaQnaRepo.findByStatus(status);
+        for (Qna qna : qnaList) {
+            qnaHisDto.addQnaResDto(new QnaResDto(qna));
+        }
+        return qnaHisDto;
     }
 }
