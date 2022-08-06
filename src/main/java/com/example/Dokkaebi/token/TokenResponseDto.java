@@ -17,12 +17,10 @@ import java.util.Date;
 public class TokenResponseDto {
     private String accessToken;
     private String refreshToken;
-    private Auth auth;
 
-    public TokenResponseDto(String accessToken, String refreshToken, Member member) {
+    public TokenResponseDto(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.auth = member.getAuth();
     }
 
     public Token toEntity(Member member) {

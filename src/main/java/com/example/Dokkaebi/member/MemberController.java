@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-    @Value("${key.token}")
-    private String key;
     private final MyPageService myPageService;
     private final MemberService memberservice;
     private final TokenService tokenService;
@@ -59,7 +57,7 @@ public class MemberController {
                 String refreshToken = tokenService.makeRefreshJws();
 
                 //추후 수정 필요..
-                TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken,member);
+                TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken);
                 Token token = tokenService.findTokenByMember(member);
                 //refresh 토큰 업데이트
                 token.refresh(refreshToken);
@@ -75,15 +73,11 @@ public class MemberController {
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
     public ResponseEntity<Object> reissueToken(
-            @RequestHeader(value = "Authorization") String accessToken,
-            @RequestHeader(value = "refresh_token") String refreshToken,
-            @RequestBody String identity) {
+            @RequestHeader(value = "refresh_token") String refreshToken) {
 
         //여기 좀 수정 필요할 수도..
-        accessToken = tokenService.refreshProcess(accessToken,refreshToken,identity);
-        Member member = memberservice.findMember(identity);
-
-        TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken,member);
+        String accessToken = tokenService.refreshProcess(refreshToken);
+        TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken);
         return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
     }
 

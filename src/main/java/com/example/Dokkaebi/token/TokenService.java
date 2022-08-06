@@ -111,35 +111,23 @@ public class TokenService {
                 .compact();
     }
 
-    public boolean refreshTokenCheck(String refreshToken, Member member){
-        Token token = jpaTokenRepo.findByMember(member);
-        int result = refreshToken.compareTo(token.getRefreshToken());
-        if(result==0){
-            if(accessTokenCheck(refreshToken)){
-                return true;
-            }else{
-                return false;
-            }
-        }else{
-            return false;
-        }
+    public boolean refreshTokenCheck(String refreshToken){
+        return accessTokenCheck(refreshToken);
     }
-    public String refreshProcess(String accessToken, String refreshToken,String identity) {
-        Member member = jpaMemberRepo.findByIdentity(identity);
+
+    public String refreshProcess(String refreshToken) {
+        Token token = jpaTokenRepo.findByRefreshToken(refreshToken);
+        Member member = token.getMember();
         if(member==null){
             throw new ApiException(ExceptionEnum.IdentityNotMatched);
         }else{
-            if(accessTokenCheck(accessToken)){
-                return accessToken;
+            if(refreshTokenCheck(refreshToken)){
+                //access 만료, refresh 유효. access 재발급
+                String newAccessToken = makeAccessJws(member);
+                return newAccessToken;
             }else{
-                if(refreshTokenCheck(refreshToken,member)){
-                    //access 만료, refresh 유효. access 재발급
-                    String newAccessToken = makeAccessJws(member);
-                    return newAccessToken;
-                }else{
-                    // 둘 다 만료. 재 로그인 필요.
-                    throw new ApiException(ExceptionEnum.NeedSignInAgain);
-                }
+                // 둘 다 만료. 재 로그인 필요.
+                throw new ApiException(ExceptionEnum.NeedSignInAgain);
             }
         }
     }
