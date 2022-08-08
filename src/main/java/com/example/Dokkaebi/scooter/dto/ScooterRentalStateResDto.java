@@ -18,4 +18,8 @@ public class ScooterRentalStateResDto {
         this.startDate = rental.getStartDate();
         this.endDate = rental.getEndDate();
     }
+
+    public ScooterRentalStateResDto(Status status) {
+        this.status = status;
+    }
 }

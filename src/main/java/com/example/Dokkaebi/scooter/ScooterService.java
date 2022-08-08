@@ -1,8 +1,7 @@
 package com.example.Dokkaebi.scooter;
 
 
-import com.example.Dokkaebi.exception.ApiException;
-import com.example.Dokkaebi.exception.ExceptionEnum;
+
 import com.example.Dokkaebi.member.Member;
 import com.example.Dokkaebi.member.MemberService;
 import com.example.Dokkaebi.rental.Rental;
@@ -12,6 +11,7 @@ import com.example.Dokkaebi.scooter.dto.*;
 import com.example.Dokkaebi.scooter.entity.DriveLog;
 import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.scooter.entity.Status;
 import com.example.Dokkaebi.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -76,8 +77,8 @@ public class ScooterService {
     public ScooterRentalStateResDto checkScooterState(String accessToken) {
         String identity = tokenService.getIdentityFromToken(accessToken);
         Member member = memberService.findMember(identity);
-        Rental rental = rentalRepo.findAllRentalByMember(member).stream().findFirst()
-                 .orElseThrow(() -> new ApiException(ExceptionEnum.RentalNotMatched));
-        return new ScooterRentalStateResDto(rental);
+        Optional<Rental> rental = rentalRepo.findAllRentalByMember(member).stream().findFirst();
+        if(rental.isPresent()) return new ScooterRentalStateResDto(rental.get());
+        else return new ScooterRentalStateResDto(Status.NONE);
     }
 }
