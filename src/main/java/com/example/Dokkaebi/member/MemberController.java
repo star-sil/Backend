@@ -72,13 +72,12 @@ public class MemberController {
     }
     @ApiOperation(value = "토큰 재발급")
     @PostMapping("/member/reissue")
-    public ResponseEntity<Object> reissueToken(
+    public ResponseEntity<TokenResponseDto> reissueToken(
             @RequestHeader(value = "refresh_token") String refreshToken) {
 
-        //여기 좀 수정 필요할 수도..
         String accessToken = tokenService.refreshProcess(refreshToken);
         TokenResponseDto tokenResponseDto = new TokenResponseDto(accessToken,refreshToken);
-        return new ResponseEntity(new Result(tokenResponseDto), HttpStatus.OK);
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
     @ApiOperation(value = "비밀번호 변경")
@@ -122,10 +121,4 @@ public class MemberController {
         MyPageResponse myPageResponse = myPageService.viewMyPage(identity);
         return ResponseEntity.ok(myPageResponse);
     }
-    @Data
-    @AllArgsConstructor
-    static class Result<T> {
-        private T data;
-    }
-
 }

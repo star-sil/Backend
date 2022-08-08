@@ -28,13 +28,21 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             throws IOException, ServletException {
         // 리퀘스트를 서블렛 리퀘스트로 변환하여 헤더에서 해당 이름 값 가져오기
         String accessToken = ((HttpServletRequest) request).getHeader("Authorization");
-        if(accessToken!=null&&tokenService.accessTokenCheck(accessToken)){
-            // accessToken 유효할 시 getAuthentication 으로 인증 정보 조회 및 토큰 생성
-            Authentication auth = tokenService.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        String path = ((HttpServletRequest) request).getServletPath();
+        if (!equalReissueUrl(path)) {
+            if(accessToken!=null&&tokenService.accessTokenCheck(accessToken)){
+                // accessToken 유효할 시 getAuthentication 으로 인증 정보 조회 및 토큰 생성
+                Authentication auth = tokenService.getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
+
         // 해당 필터는 WebSecurityConfig 수준에서 UsernamePasswordAuthenticationFilter
         // 이전 단계에 추가 되어 invoke 당하게 된다. (서블릿 필터 단계에서 ㅇㅇ)
         filterChain.doFilter(request,response);
+    }
+
+    public boolean equalReissueUrl(String path){
+        return path.equals("/member/reissue");
     }
 }
