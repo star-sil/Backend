@@ -35,5 +35,6 @@ public class Rental {
         this.price = rentalRequestDto.getPrice();
         this.address = rentalRequestDto.getAddress();
         this.scooterState = scooterState;
+        this.scooterState.addRental(this);
     }
 }

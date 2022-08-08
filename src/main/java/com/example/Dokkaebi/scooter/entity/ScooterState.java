@@ -19,7 +19,7 @@ public class ScooterState {
     @Enumerated(EnumType.STRING)
     private Status status;
     private int useCount;
-    @OneToMany
+    @OneToMany(mappedBy = "scooterState")
     private List<Rental> rentals = new ArrayList<>();
 
     @Builder
@@ -31,5 +31,9 @@ public class ScooterState {
 
     public void changeStatus(Status status) {
         this.status = status;
+    }
+
+    public void addRental(Rental rental) {
+        this.rentals.add(rental);
     }
 }
