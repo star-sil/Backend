@@ -7,6 +7,7 @@ import com.example.Dokkaebi.rental.dto.RentalRequestDto;
 import com.example.Dokkaebi.rental.dto.RentalResDto;
 import com.example.Dokkaebi.rental.dto.RentalStatResDto;
 import com.example.Dokkaebi.scooter.entity.Status;
+import com.example.Dokkaebi.token.TokenService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.List;
 public class RentalController {
     private final RentalService rentalService;
     private final MemberService memberService;
+    private final TokenService tokenService;
 
     @PostMapping("/rental/price")
     public long rentalPrice(@RequestBody RentalRequestDto rentalRequestDto) {
@@ -31,7 +33,8 @@ public class RentalController {
 
     @PostMapping("/rental/new")
     public void startRental(@RequestHeader(value = "Authorization") @NotNull String accessToken, @RequestBody RentalRequestDto rentalRequestDto) {
-        Member member = memberService.findMember(accessToken);
+        String token = tokenService.getIdentityFromToken(accessToken);
+        Member member = memberService.findMember(token);
         rentalService.startRental(member, rentalRequestDto);
     }
 
