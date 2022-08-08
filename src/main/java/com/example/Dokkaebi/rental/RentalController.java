@@ -65,8 +65,8 @@ public class RentalController {
 
     @ApiOperation(value = "대여 요청 처리")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("rental/{rentalId}")
-    public void processRentalReq(@RequestParam(value = "rentalId") Long rentalId) {
+    @GetMapping("rental/admin/{rentalId}")
+    public void processRentalReq(@PathVariable Long rentalId) {
         rentalService.processRentalReq(rentalId);
     }
 }
