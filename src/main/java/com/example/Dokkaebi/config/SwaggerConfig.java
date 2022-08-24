@@ -58,7 +58,6 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.example.Dokkaebi"))
-                .paths(PathSelectors.regex("/\\b(?!exception).+?\\b"))
                 .build();
     }
 
