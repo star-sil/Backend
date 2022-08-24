@@ -92,7 +92,9 @@ public class RentalService {
         for (ScooterState scooterState : scooterStates) {
             Optional<Rental> rental = scooterState.getRentals().stream().findFirst();
             if (rental.isPresent()) {
-                rentalStatResDtos.add(new RentalStatResDto(rental.get()));
+                rentalStatResDtos.add(new RentalStatResDto(rental.get(), scooterState.getIdentity()));
+            } else {
+                rentalStatResDtos.add(new RentalStatResDto(scooterState.getIdentity()));
             }
         }
         return rentalStatResDtos;
