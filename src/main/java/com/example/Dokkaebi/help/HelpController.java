@@ -4,6 +4,7 @@ import com.example.Dokkaebi.help.Qna.Qna;
 import com.example.Dokkaebi.help.Qna.QnaService;
 import com.example.Dokkaebi.help.Qna.QnaStatus;
 import com.example.Dokkaebi.help.dto.QnaHisDto;
+import com.example.Dokkaebi.help.dto.QnaReplyDto;
 import com.example.Dokkaebi.help.dto.QnaReqDto;
 import com.example.Dokkaebi.member.Member;
 import com.example.Dokkaebi.member.MemberService;
@@ -48,8 +49,8 @@ public class HelpController {
     @PostMapping("/help/qna/{qnaId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation(value = "문의사항 답변하기")
-    public ResponseEntity<Long> replyQna(@RequestBody QnaReqDto qnaReqDto, @PathVariable Long qnaId) {
-        qnaService.reply(qnaReqDto,qnaId);
+    public ResponseEntity<Long> replyQna(@RequestBody QnaReplyDto qnaReplyDto, @PathVariable Long qnaId) {
+        qnaService.reply(qnaReplyDto,qnaId);
         return new ResponseEntity(HttpStatus.OK);
     }
 

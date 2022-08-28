@@ -3,6 +3,7 @@ package com.example.Dokkaebi.help.Qna;
 import com.example.Dokkaebi.exception.ApiException;
 import com.example.Dokkaebi.exception.ExceptionEnum;
 import com.example.Dokkaebi.help.dto.QnaHisDto;
+import com.example.Dokkaebi.help.dto.QnaReplyDto;
 import com.example.Dokkaebi.help.dto.QnaReqDto;
 import com.example.Dokkaebi.help.dto.QnaResDto;
 import com.example.Dokkaebi.member.Member;
@@ -47,10 +48,10 @@ public class QnaService {
     }
 
     @Transactional
-    public void reply(QnaReqDto qnaReqDto, Long qnaId) {
+    public void reply(QnaReplyDto qnaReplyDto, Long qnaId) {
         Qna qna = jpaQnaRepo.findById(qnaId)
                 .orElseThrow(()->new ApiException(ExceptionEnum.InvalidQnaId));
-        Content content = new Content(qnaReqDto.getComment(), WriterStatus.ADMIN, qna);
+        Content content = new Content(qnaReplyDto.getComment(), WriterStatus.ADMIN, qna);
         jpaContentRepo.save(content);
         qna.AdminResponded();
     }
