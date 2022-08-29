@@ -52,6 +52,13 @@ public class HelpController {
         qnaService.addContent(qnaReplyDto, qnaId);
     }
 
+    @PatchMapping("/help/qna/{qnaId}")
+    @PreAuthorize("hasAuthority('USER')")
+    @ApiOperation(value = "문의 해결 처리")
+    public void solveQna(@PathVariable Long qnaId) {
+        qnaService.solve(qnaId);
+    }
+
     @PostMapping("/help/qna/{qnaId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation(value = "문의사항 답변하기")

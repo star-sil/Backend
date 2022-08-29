@@ -35,7 +35,7 @@ public class Qna {
         this.status=QnaStatus.REGISTERED;
         this.questioner=questioner;
     }
-    public void AdminConfirm(){
+    public void solve(){
         this.status= QnaStatus.COMPLETE;
     }
     public void AdminResponded(){

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -71,5 +70,12 @@ public class QnaService {
                 .orElseThrow(()-> new ApiException(ExceptionEnum.InvalidQnaId));
         Content content = new Content(qnaReplyDto.getComment(), WriterStatus.USER, qna);
         jpaContentRepo.save(content);
+    }
+
+    @Transactional
+    public void solve(Long qnaId) {
+        Qna qna = jpaQnaRepo.findById(qnaId)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.InvalidQnaId));
+        qna.solve();
     }
 }
