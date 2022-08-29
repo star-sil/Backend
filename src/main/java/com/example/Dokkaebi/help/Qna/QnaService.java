@@ -64,4 +64,12 @@ public class QnaService {
         }
         return qnaHisDto;
     }
+
+    @Transactional
+    public void addContent(QnaReplyDto qnaReplyDto, Long qnaId) {
+        Qna qna = jpaQnaRepo.findById(qnaId)
+                .orElseThrow(()-> new ApiException(ExceptionEnum.InvalidQnaId));
+        Content content = new Content(qnaReplyDto.getComment(), WriterStatus.USER, qna);
+        jpaContentRepo.save(content);
+    }
 }

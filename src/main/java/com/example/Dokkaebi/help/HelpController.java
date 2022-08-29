@@ -46,11 +46,17 @@ public class HelpController {
         return ResponseEntity.ok(qna.getId());
     }
 
+    @PatchMapping("/help/qna/{qnaId}")
+    @ApiOperation(value = "문의 추가작성", notes = "기존 문의사항에 추가로 내용을 등록한다.")
+    public void addContent(@RequestBody QnaReplyDto qnaReplyDto, @PathVariable Long qnaId) {
+        qnaService.addContent(qnaReplyDto, qnaId);
+    }
+
     @PostMapping("/help/qna/{qnaId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ApiOperation(value = "문의사항 답변하기")
     public ResponseEntity<Long> replyQna(@RequestBody QnaReplyDto qnaReplyDto, @PathVariable Long qnaId) {
-        qnaService.reply(qnaReplyDto,qnaId);
+        qnaService.reply(qnaReplyDto, qnaId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
