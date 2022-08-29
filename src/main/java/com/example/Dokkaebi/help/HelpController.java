@@ -46,7 +46,7 @@ public class HelpController {
         return ResponseEntity.ok(qna.getId());
     }
 
-    @PatchMapping("/help/qna/{qnaId}")
+    @PostMapping("/help/qna/{qnaId}/content")
     @ApiOperation(value = "문의 추가작성", notes = "기존 문의사항에 추가로 내용을 등록한다.")
     public void addContent(@RequestBody QnaReplyDto qnaReplyDto, @PathVariable Long qnaId) {
         qnaService.addContent(qnaReplyDto, qnaId);
