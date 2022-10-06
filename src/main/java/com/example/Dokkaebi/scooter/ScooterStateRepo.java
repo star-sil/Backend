@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,10 +19,9 @@ public class ScooterStateRepo {
                 .getResultList();
     }
 
-    public List<ScooterState> findOne(String identity) {
+    public Optional<ScooterState> findOne(String identity) {
         return em.createQuery("select s from ScooterState s where s.identity = :identity",ScooterState.class)
-                .setParameter("identity", identity)
-                .getResultList();
+                .setParameter("identity", identity).getResultList().stream().findFirst();
     }
 
     public ScooterState findOneById(Long id) {
