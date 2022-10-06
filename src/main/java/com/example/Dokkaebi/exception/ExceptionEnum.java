@@ -13,11 +13,14 @@ public enum ExceptionEnum {
     DriveLogNotMatched(HttpStatus.BAD_REQUEST,105,"해당하는 주행기록이 없습니다"),
     NotExistAvailableScooter(HttpStatus.BAD_REQUEST, 106, "대여가능한 스쿠터가 존재하지 않습니다."),
     IdentityDuplicated(HttpStatus.UNAUTHORIZED, 107, "이미 존재하는 아이디 입니다."),
+    ScooterStateNotMatched(HttpStatus.NOT_FOUND,108,"해당 스쿠터가 존재하지 않습니다."),
 
     InvalidQnaId(HttpStatus.UNPROCESSABLE_ENTITY,201,"qnd id에 맞는 문의사항이 존재하지 않습니다."),
     SecurityTokenException(HttpStatus.UNAUTHORIZED,301,"auth 단계의 인증 실패"),
     SecurityInvalidToken(HttpStatus.UNAUTHORIZED,302,"Access Token이 만료되었습니다."),
-    SecurityNoAuthentication(HttpStatus.UNAUTHORIZED,303,"접근 권한이 없습니다.");
+    SecurityNoAuthentication(HttpStatus.UNAUTHORIZED,303,"접근 권한이 없습니다."),
+    InvalidAction(HttpStatus.BAD_REQUEST,400,"해당 스쿠터를 제어할 수 없습니다."),
+    InvalidConnected(HttpStatus.REQUEST_TIMEOUT,401,"tcp 서버와 통신중 오류가 발생했습니다.");
 
 
     private HttpStatus status;

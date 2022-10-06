@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 public class ScooterRentalStateResDto {
+    private String bikeNum;
     private Status status;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -17,6 +18,7 @@ public class ScooterRentalStateResDto {
         this.status = rental.getScooterState().getStatus();
         this.startDate = rental.getStartDate();
         this.endDate = rental.getEndDate();
+        this.bikeNum = rental.getScooterState().getIdentity();
     }
 
     public ScooterRentalStateResDto(Status status) {
