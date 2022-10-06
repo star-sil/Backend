@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -21,6 +22,7 @@ public class Rental {
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalDate date;
+    private LocalDateTime log;
     private Long price;
     private String address;
     @ManyToOne @JoinColumn(name = "scooter_state_id")
@@ -36,5 +38,6 @@ public class Rental {
         this.address = rentalRequestDto.getAddress();
         this.scooterState = scooterState;
         this.scooterState.addRental(this);
+        this.log = LocalDateTime.now();
     }
 }
