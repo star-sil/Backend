@@ -1,7 +1,7 @@
 package com.example.Dokkaebi.scooter.dto;
 
 import com.example.Dokkaebi.scooter.entity.DriveLog;
-import com.example.Dokkaebi.scooter.entity.Scooter;
+import com.example.Dokkaebi.scooter.entity.ScooterState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,9 +21,9 @@ public class DriveLogDto {
         this.startTime = driveLog.getStartTime();
         this.driveDist = driveLog.calculateDist();
 
-        for (Scooter scooter : driveLog.getScooters()) {
-            this.soc = scooter.getSoc();
-            route.add(new Route(scooter.getLat(),scooter.getLon()));
+        for (ScooterState scooterState : driveLog.getScooterStates()) {
+            this.soc = scooterState.getSoc();
+            route.add(new Route(scooterState.getLat(), scooterState.getLon()));
         }
     }
 

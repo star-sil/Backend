@@ -1,7 +1,7 @@
 package com.example.Dokkaebi.rental;
 
 import com.example.Dokkaebi.rental.dto.RentalRequestDto;
-import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.example.Dokkaebi.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,23 +21,21 @@ public class Rental {
     private Member member;
     private LocalDate startDate;
     private LocalDate endDate;
-    private LocalDate date;
-    private LocalDateTime log;
+    private LocalDateTime requestTime;
     private Long price;
     private String address;
-    @ManyToOne @JoinColumn(name = "scooter_state_id")
-    private ScooterState scooterState;
+    @ManyToOne @JoinColumn(name = "scooter_id")
+    private Scooter scooter;
 
     @Builder
-    public Rental(Member member, RentalRequestDto rentalRequestDto, ScooterState scooterState) {
+    public Rental(Member member, RentalRequestDto rentalRequestDto, Scooter scooter) {
         this.member = member;
         this.startDate = rentalRequestDto.getStartDate();
         this.endDate = rentalRequestDto.getEndDate();
-        this.date = rentalRequestDto.getDate();
         this.price = rentalRequestDto.getPrice();
         this.address = rentalRequestDto.getAddress();
-        this.scooterState = scooterState;
-        this.scooterState.addRental(this);
-        this.log = LocalDateTime.now();
+        this.scooter = scooter;
+        this.scooter.addRental(this);
+        this.requestTime = LocalDateTime.now();
     }
 }

@@ -4,6 +4,7 @@ import com.example.Dokkaebi.rental.Rental;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class RentalStatResDto {
@@ -11,7 +12,7 @@ public class RentalStatResDto {
     private String address;
     private LocalDate startDate;
     private LocalDate endDate;
-    private LocalDate date;
+    private LocalDateTime date;
     private String identity;
     private String bikeNm;
 
@@ -20,7 +21,7 @@ public class RentalStatResDto {
         this.address = rental.getAddress();
         this.startDate = rental.getStartDate();
         this.endDate = rental.getEndDate();
-        this.date = rental.getDate();
+        this.date = rental.getRequestTime();
         this.identity = rental.getMember().getIdentity();
         this.bikeNm = bikeNm;
     }

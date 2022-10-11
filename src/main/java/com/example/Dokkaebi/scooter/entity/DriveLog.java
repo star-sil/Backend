@@ -16,33 +16,42 @@ import java.util.List;
 public class DriveLog {
     @Id @GeneratedValue
     private Long id;
-    private int useCount; //scooter_state와 겹침 제거 필요
+    private int useCount;
     private LocalDateTime startTime;
-    private String scooterIdentity;
+    private LocalDateTime endTime;
+    @ManyToOne @JoinColumn(name = "scooter_id")
+    private Scooter scooter;
 
     @OneToMany(mappedBy = "driveLog")
-    private List<Scooter> scooters = new ArrayList<>();
+    private List<ScooterState> scooterStates = new ArrayList<>();
 
     @ManyToOne @JoinColumn(name = "rental_id")
     private Rental rental;
 
     @Builder
-    public DriveLog(int useCount, Scooter scooter, LocalDateTime startTime,Rental rental) {
+    public DriveLog(int useCount, Scooter scooter, Rental rental) {
         this.useCount = useCount;
-        this.scooters.add(scooter);
         this.rental = rental;
-        this.scooterIdentity = scooter.getIdentity();
-        this.startTime = startTime;
+        this.scooter = scooter;
+        this.startTime = LocalDateTime.now();
+    }
+
+    public void addDriveLog(ScooterState scooterState) {
+        scooterStates.add(scooterState);
+    }
+
+    public void endDrive() {
+        this.endTime = LocalDateTime.now();
     }
 
     public double calculateDist() {
         double distance = 0;
-        if(scooters.size() <= 1){
+        if(scooterStates.size() <= 1){
             return distance;
         } else{
-            for(int i = 1; i < scooters.size(); ++i){
-                distance += calDistance(scooters.get(i-1).getLat(),scooters.get(i-1).getLon(),
-                        scooters.get(i).getLat(),scooters.get(i).getLon());
+            for(int i = 1; i < scooterStates.size(); ++i){
+                distance += calDistance(scooterStates.get(i-1).getLat(), scooterStates.get(i-1).getLon(),
+                        scooterStates.get(i).getLat(), scooterStates.get(i).getLon());
             }
         }
         return distance;

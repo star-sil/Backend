@@ -8,10 +8,10 @@ import com.example.Dokkaebi.rental.dto.RentalHisResDto;
 import com.example.Dokkaebi.rental.dto.RentalRequestDto;
 import com.example.Dokkaebi.rental.dto.RentalResDto;
 import com.example.Dokkaebi.rental.dto.RentalStatResDto;
-import com.example.Dokkaebi.scooter.DriveLogRepo;
-import com.example.Dokkaebi.scooter.ScooterStateRepo;
+import com.example.Dokkaebi.scooter.Repo.DriveLogRepo;
+import com.example.Dokkaebi.scooter.Repo.ScooterRepo;
 import com.example.Dokkaebi.scooter.entity.DriveLog;
-import com.example.Dokkaebi.scooter.entity.ScooterState;
+import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.example.Dokkaebi.scooter.entity.Status;
 import com.example.Dokkaebi.token.TokenService;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class RentalService {
     private final RentalRepository rentalRepo;
     private final MemberService memberService;
     private final TokenService tokenService;
-    private final ScooterStateRepo scooterStateRepo;
+    private final ScooterRepo scooterRepo;
     private final DriveLogRepo driveLogRepo;
 
     @Transactional
@@ -46,11 +46,11 @@ public class RentalService {
 
     @Transactional
     public void startRental(Member member, RentalRequestDto rentalRequestDto) {
-        ScooterState scooterState = scooterStateRepo.findScootersByStatus(Status.NONE).stream().findFirst()
+        Scooter scooter = scooterRepo.findScootersByStatus(Status.NONE).stream().findFirst()
                 .orElseThrow(() -> new ApiException(ExceptionEnum.NotExistAvailableScooter));
-        scooterState.changeStatus(Status.WAIT);
-        rentalRepo.save(new Rental(member,rentalRequestDto,scooterState));
-        log.info("rental: " + member.getIdentity() + " " + scooterState.getIdentity() + " " + scooterState.getStatus());
+        scooter.changeStatus(Status.WAIT);
+        rentalRepo.save(new Rental(member,rentalRequestDto, scooter));
+        log.info("rental: " + member.getIdentity() + " " + scooter.getIdentity() + " " + scooter.getStatus());
     }
 
     public RentalHisResDto findAllRentalByMember(String accessToken) {
@@ -82,19 +82,19 @@ public class RentalService {
         Member member = memberService.findMember(identity);
         Rental rental = rentalRepo.findOneRentalByMember(member)
                 .orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
-        ScooterState scooterState = scooterStateRepo.findOneById(rental.getScooterState().getId());
-        scooterState.changeStatus(Status.NONE);
+        Scooter scooter = scooterRepo.findOneById(rental.getScooter().getId());
+        scooter.changeStatus(Status.NONE);
     }
 
     public List<RentalStatResDto> findAllRentalByStatus(Status status) {
         List<RentalStatResDto> rentalStatResDtos = new ArrayList<>();
-        List<ScooterState> scooterStates = scooterStateRepo.findScootersByStatus(status);
-        for (ScooterState scooterState : scooterStates) {
-            Optional<Rental> rental = scooterState.getRentals().stream().findFirst();
+        List<Scooter> scooters = scooterRepo.findScootersByStatus(status);
+        for (Scooter scooter : scooters) {
+            Optional<Rental> rental = scooter.getRentals().stream().findFirst();
             if (rental.isPresent()) {
-                rentalStatResDtos.add(new RentalStatResDto(rental.get(), scooterState.getIdentity()));
+                rentalStatResDtos.add(new RentalStatResDto(rental.get(), scooter.getIdentity()));
             } else {
-                rentalStatResDtos.add(new RentalStatResDto(scooterState.getIdentity()));
+                rentalStatResDtos.add(new RentalStatResDto(scooter.getIdentity()));
             }
         }
         return rentalStatResDtos;
@@ -103,6 +103,6 @@ public class RentalService {
     @Transactional
     public void processRentalReq(Long rentalId) {
         Rental rental = rentalRepo.findById(rentalId);
-        rental.getScooterState().changeStatus(Status.RENTAL);
+        rental.getScooter().changeStatus(Status.RENTAL);
     }
 }
