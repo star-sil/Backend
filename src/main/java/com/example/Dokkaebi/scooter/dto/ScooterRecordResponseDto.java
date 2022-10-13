@@ -10,6 +10,6 @@ public class ScooterRecordResponseDto {
 
     public ScooterRecordResponseDto(ScooterState scooterState){
         lat = scooterState.getLat();
-        lon = scooterState.getLon();
+        lon = scooterState.getLng();
     }
 }

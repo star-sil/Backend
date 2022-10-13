@@ -50,8 +50,8 @@ public class DriveLog {
             return distance;
         } else{
             for(int i = 1; i < scooterStates.size(); ++i){
-                distance += calDistance(scooterStates.get(i-1).getLat(), scooterStates.get(i-1).getLon(),
-                        scooterStates.get(i).getLat(), scooterStates.get(i).getLon());
+                distance += calDistance(scooterStates.get(i-1).getLat(), scooterStates.get(i-1).getLng(),
+                        scooterStates.get(i).getLat(), scooterStates.get(i).getLng());
             }
         }
         return distance;

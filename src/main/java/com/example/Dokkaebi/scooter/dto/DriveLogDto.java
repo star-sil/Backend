@@ -23,7 +23,7 @@ public class DriveLogDto {
 
         for (ScooterState scooterState : driveLog.getScooterStates()) {
             this.soc = scooterState.getSoc();
-            route.add(new Route(scooterState.getLat(), scooterState.getLon()));
+            route.add(new Route(scooterState.getLat(), scooterState.getLng()));
         }
     }
 

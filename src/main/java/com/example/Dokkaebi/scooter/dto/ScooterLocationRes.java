@@ -14,7 +14,7 @@ public class ScooterLocationRes {
 
     public ScooterLocationRes(ScooterState scooterState) {
         this.lat = scooterState.getLat();
-        this.lng = scooterState.getLon();
+        this.lng = scooterState.getLng();
         this.soc = scooterState.getSoc();
         this.endDate = scooterState.getTime();
     }

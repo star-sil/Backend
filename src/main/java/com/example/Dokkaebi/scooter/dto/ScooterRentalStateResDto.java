@@ -25,7 +25,7 @@ public class ScooterRentalStateResDto {
         this.endDate = rental.getEndDate();
         this.bikeNum = rental.getScooter().getIdentity();
         this.lat = scooterState.getLat();
-        this.lng = scooterState.getLon();
+        this.lng = scooterState.getLng();
         this.soc = scooterState.getSoc();
     }
 

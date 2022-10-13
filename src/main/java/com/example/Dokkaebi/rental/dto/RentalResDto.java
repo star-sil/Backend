@@ -42,7 +42,7 @@ class RideHistory {
 
     public void sumRide(DriveLog driveLog) {
         for (ScooterState scooterState : driveLog.getScooterStates()) {
-            this.route.add(new Gps(scooterState.getLat(), scooterState.getLon()));
+            this.route.add(new Gps(scooterState.getLat(), scooterState.getLng()));
         }
     }
 }
