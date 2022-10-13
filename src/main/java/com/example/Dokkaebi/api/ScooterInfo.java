@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class ScooterInfo {
     private String identity;
     private String act;
+    private Long rentalId;
 }

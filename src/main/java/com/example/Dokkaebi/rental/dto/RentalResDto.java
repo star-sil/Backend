@@ -1,7 +1,7 @@
 package com.example.Dokkaebi.rental.dto;
 
 import com.example.Dokkaebi.scooter.entity.DriveLog;
-import com.example.Dokkaebi.scooter.entity.Scooter;
+import com.example.Dokkaebi.scooter.entity.ScooterState;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -30,8 +30,8 @@ class RideHistory {
 
     public RideHistory(DriveLog driveLog) {
         this.distance = driveLog.calculateDist();
-        this.startDate = driveLog.getScooters().get(0).getTime();
-        this.endDate = driveLog.getScooters().get(driveLog.getScooters().size()-1).getTime();
+        this.startDate = driveLog.getScooterStates().get(0).getTime();
+        this.endDate = driveLog.getScooterStates().get(driveLog.getScooterStates().size()-1).getTime();
         this.rideTime = calRideTime(this.startDate,this.endDate);
         sumRide(driveLog);
     }
@@ -41,8 +41,8 @@ class RideHistory {
     }
 
     public void sumRide(DriveLog driveLog) {
-        for (Scooter scooter : driveLog.getScooters()) {
-            this.route.add(new Gps(scooter.getLat(), scooter.getLon()));
+        for (ScooterState scooterState : driveLog.getScooterStates()) {
+            this.route.add(new Gps(scooterState.getLat(), scooterState.getLon()));
         }
     }
 }

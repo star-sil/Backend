@@ -33,7 +33,6 @@ class RentalInfo {
         this.startDate = rental.getStartDate();
         this.endDate = rental.getEndDate();
         sumAllDriveDist(driveLogs);
-        this.rideCount = rental.getScooterState().getUseCount();
         this.cost = rental.getPrice();
     }
 

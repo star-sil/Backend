@@ -1,6 +1,6 @@
 package com.example.Dokkaebi.scooter.dto;
 
-import com.example.Dokkaebi.scooter.entity.Scooter;
+import com.example.Dokkaebi.scooter.entity.ScooterState;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,10 +12,10 @@ public class ScooterLocationRes {
     private int soc;
     private LocalDateTime endDate;
 
-    public ScooterLocationRes(Scooter scooter) {
-        this.lat = scooter.getLat();
-        this.lng = scooter.getLon();
-        this.soc = scooter.getSoc();
-        this.endDate = scooter.getTime();
+    public ScooterLocationRes(ScooterState scooterState) {
+        this.lat = scooterState.getLat();
+        this.lng = scooterState.getLon();
+        this.soc = scooterState.getSoc();
+        this.endDate = scooterState.getTime();
     }
 }
