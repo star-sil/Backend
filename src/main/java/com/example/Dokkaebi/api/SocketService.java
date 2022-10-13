@@ -2,9 +2,12 @@ package com.example.Dokkaebi.api;
 
 import com.example.Dokkaebi.exception.ApiException;
 import com.example.Dokkaebi.exception.ExceptionEnum;
-import com.example.Dokkaebi.scooter.ScooterStateRepo;
-import com.example.Dokkaebi.scooter.entity.ScooterState;
-import com.example.Dokkaebi.scooter.entity.Status;
+import com.example.Dokkaebi.rental.JpaRentalRepo;
+import com.example.Dokkaebi.rental.Rental;
+import com.example.Dokkaebi.scooter.Repo.DriveLogRepo;
+import com.example.Dokkaebi.scooter.Repo.ScooterRepo;
+import com.example.Dokkaebi.scooter.entity.DriveLog;
+import com.example.Dokkaebi.scooter.entity.Scooter;
 import com.google.common.io.ByteStreams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +25,9 @@ import java.net.SocketAddress;
 @RequiredArgsConstructor
 public class SocketService {
 
-    private final ScooterStateRepo scooterStateRepo;
+    private final ScooterRepo scooterRepo;
+    private final DriveLogRepo driveLogRepo;
+    private final JpaRentalRepo jpaRentalRepo;
 
     @Value("${host.ip}")
     private String ip;
@@ -35,34 +40,44 @@ public class SocketService {
     @Value("${protocol.fin}")
     private String fin;
 
+
+    /**
+     * TODO 소켓 도메인을 하나 파자 -> 엔티티도 추가
+     */
     @Transactional
     public void controlScooter(ScooterInfo scooterInfo) {
+
         String identity = scooterInfo.getIdentity();
         String act = scooterInfo.getAct();
+
+        Scooter scooter = scooterRepo.findOne(identity)
+                .orElseThrow(() -> new ApiException(ExceptionEnum.IdentityNotMatched));
+        Integer nextDriveCount = driveLogRepo.countDriveLogByScooter(scooter) + 1;
+
         if (act.equals("on")) {
-            String msg = start + identity + fin;
-            sendMsg(msg.getBytes());
-            ScooterState scooterState = scooterStateRepo.findOne(identity)
-                    .orElseThrow(() -> new ApiException(ExceptionEnum.IdentityNotMatched));
-            scooterState.changeStatus(Status.DRIVE);
+            Rental rental = jpaRentalRepo.findById(scooterInfo.getRentalId())
+                    .orElseThrow(()->new ApiException(ExceptionEnum.RentalNotMatched));
+            DriveLog driveLog = new DriveLog(nextDriveCount, scooter, rental);
+            driveLogRepo.save(driveLog);
+            sendMsg(start+scooter.getIdentity()+fin);
+            scooter.startDrive(driveLog);
         } else if (act.equals("off")) {
-            String msg = end + identity + fin;
-            sendMsg(msg.getBytes());
-            ScooterState scooterState = scooterStateRepo.findOne(identity)
-                    .orElseThrow(() -> new ApiException(ExceptionEnum.IdentityNotMatched));
-            scooterState.changeStatus(Status.RENTAL);
+            sendMsg(end+scooter.getIdentity()+fin);
+            scooter.endDrive();
         } else {
             throw new ApiException(ExceptionEnum.InvalidAction);
         }
     }
 
-    private void sendMsg(byte[] msg) {
+    // TODO 메세지를 전송하고 응답 메시지를 받아서 처리하는 것까지 완료하기
+    public void sendMsg(String msg) {
+        byte[] send = msg.getBytes();
         try {
             Socket socket = new Socket();
-            SocketAddress address = new InetSocketAddress(ip,port);
+            SocketAddress address = new InetSocketAddress(ip, port);
             socket.connect(address);
             OutputStream os = socket.getOutputStream();
-            os.write(msg);
+            os.write(send);
             os.flush();
             InputStream is = socket.getInputStream();
             byte[] reply = new byte[5];
