@@ -23,4 +23,9 @@ public class ScooterStateRepository {
     public void save(ScooterState scooterState) {
         em.persist(scooterState);
     }
+
+    public List<ScooterState> findAll() {
+        return em.createQuery("select s from ScooterState s", ScooterState.class)
+                .getResultList();
+    }
 }

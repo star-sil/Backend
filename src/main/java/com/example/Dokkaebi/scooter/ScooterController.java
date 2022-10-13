@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +43,12 @@ public class ScooterController {
     @GetMapping("/scooter/remainTime")
     public ScooterRemainTimeDto checkRemainTime() throws Exception {
         return flaskApi.requestRemainTime();
+    }
+
+    @ApiOperation(value = "주행테스트중 스쿠터 주행 기록 확인")
+    @GetMapping("/scooter/test")
+    public List<ScooterStateResDto> checkScooter() {
+        return scooterService.findAllScooter();
     }
 
     @Data

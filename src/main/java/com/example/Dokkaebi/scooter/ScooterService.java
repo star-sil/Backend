@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -65,5 +67,14 @@ public class ScooterService {
             return new ScooterRentalStateResDto(rental.get(),scooter);
         }
         else return new ScooterRentalStateResDto(Status.NONE);
+    }
+
+    public List<ScooterStateResDto> findAllScooter() {
+        List<ScooterState> scooterStates = scooterStateRepo.findAll();
+        List<ScooterStateResDto> scooterStateResDtos = new ArrayList<>();
+        for (ScooterState scooterState : scooterStates) {
+            scooterStateResDtos.add(new ScooterStateResDto(scooterState));
+        }
+        return scooterStateResDtos;
     }
 }
