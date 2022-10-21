@@ -72,8 +72,10 @@ public class ScooterService {
     public List<ScooterStateResDto> findAllScooter() {
         List<ScooterState> scooterStates = scooterStateRepo.findAll();
         List<ScooterStateResDto> scooterStateResDtos = new ArrayList<>();
-        for (ScooterState scooterState : scooterStates) {
-            scooterStateResDtos.add(new ScooterStateResDto(scooterState));
+        int size = scooterStates.size();
+        for (int i = 0; i < 1000; i++) {
+            if (i >= size) break;
+            scooterStateResDtos.add(new ScooterStateResDto(scooterStates.get(i)));
         }
         return scooterStateResDtos;
     }

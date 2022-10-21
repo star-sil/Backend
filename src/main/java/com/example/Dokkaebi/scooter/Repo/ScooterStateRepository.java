@@ -25,7 +25,7 @@ public class ScooterStateRepository {
     }
 
     public List<ScooterState> findAll() {
-        return em.createQuery("select s from ScooterState s", ScooterState.class)
+        return em.createQuery("select s from ScooterState s order by s.time desc", ScooterState.class)
                 .getResultList();
     }
 }
