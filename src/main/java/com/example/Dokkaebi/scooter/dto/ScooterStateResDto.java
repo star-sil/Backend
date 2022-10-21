@@ -19,6 +19,7 @@ public class ScooterStateResDto {
     private String pow;
     private int shock;
     private LocalDateTime time;
+    private int altitude;
 
     public ScooterStateResDto(ScooterState scooterState) {
         this.id = scooterState.getId();
@@ -33,5 +34,6 @@ public class ScooterStateResDto {
         this.pow = scooterState.getPow();
         this.shock = scooterState.getShock();
         this.time = scooterState.getTime();
+        this.altitude = scooterState.getAltitude();
     }
 }

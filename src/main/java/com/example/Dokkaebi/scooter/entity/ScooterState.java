@@ -24,6 +24,7 @@ public class ScooterState {
     private int speed;
     private double lat;
     private double lng;
+    private int altitude;
     private String pow;
     private int shock;
     private LocalDateTime time;
@@ -32,7 +33,7 @@ public class ScooterState {
 
     @Builder
     public ScooterState(Scooter scooter, String stat, int soc, double volt, String current, int temp,int speed,
-                        double lat, double lng, String pow, int shock, LocalDateTime time, DriveLog driveLog) {
+                        double lat, double lng, String pow, int shock, LocalDateTime time, DriveLog driveLog,int altitude) {
         this.scooter = scooter;
         this.stat = stat;
         this.soc = soc;
@@ -46,5 +47,6 @@ public class ScooterState {
         this.shock = shock;
         this.time = time;
         this.driveLog = driveLog;
+        this.altitude = altitude;
     }
 }
